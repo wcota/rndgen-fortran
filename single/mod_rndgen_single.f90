@@ -142,10 +142,13 @@ contains
     end function
 
     ! SPECIFIC FOR PL: IF NOT USED, CAN DELETE
-    subroutine rnd_PLinit(k0,kc,gama)
+    subroutine rnd_PLinit(k0,kc,gama,iseed))
         integer, intent(in) :: k0, kc
         real*8, intent(in) :: gama
+        integer, intent(in), optional :: iseed
         integer :: j
+        
+        if (present(iseed)) call rnd_init(iseed)
         
         rndPL_k0 = k0
         rndPL_kc = kc

@@ -8,12 +8,9 @@ implicit none
     integer, allocatable :: pok(:)
     integer :: amostras = 4
     real*8 :: soma
-
-    ! Inicializa o gerador:
-    call rnd_init(semente)
     
     ! Inicializa o gerador PL:
-    call rnd_PLinit(3,int(N**(1d0/2d0)),2.1d0) ! k0, kc, gama
+    call rnd_PLinit(3,int(N**(1d0/2d0)),2.1d0,semente) ! k0, kc, gama, iseed
     
     allocate(pok(rndPL_k0:rndPL_kc))
     
