@@ -40,8 +40,15 @@ implicit none
 
     integer :: rnd_o_iseed                      ! original seed
     integer(i4b), private :: rnd_x,rnd_y,rnd_z,rnd_w        ! working variables for the four generators
+    
+    ! SPECIFIC FOR PL: IF NOT USED, CAN DELETE
+    real*8, private :: rndPL_AA, rndPL_expo, rndPL_x0, rndPL_xc
+    real*8, protected :: rndPL_gama
+    integer, protected :: rndPL_k0, rndPL_kc
+    real*8, private, allocatable :: rndPL_pk(:)
+    ! / SPECIFIC FOR PL: IF NOT USED, CAN DELETE
 
-contains
+contains    
 
     function rnd()  ! KISS
         implicit none
@@ -133,5 +140,52 @@ contains
         
         rnd_int = min(int(rnd()*(i2+1-i1))+i1,i2)
     end function
+
+    ! SPECIFIC FOR PL: IF NOT USED, CAN DELETE
+    subroutine rnd_PLinit(k0,kc,gama)
+        integer, intent(in) :: k0, kc
+        real*8, intent(in) :: gama
+        integer :: j
+        
+        rndPL_k0 = k0
+        rndPL_kc = kc
+        rndPL_gama = gama
+        
+        if (allocated(rndPL_pk)) deallocate(rndPL_pk)
+        allocate(rndPL_pk(k0:kc))
+        
+        rndPL_AA = 0d0
+        do j=k0,kc
+            rndPL_AA=rndPL_AA + (1d0*j)**(-gama)
+            rndPL_pk(j) = (1d0*j)**(-gama)
+        enddo
+        rndPL_AA = 1d0/rndPL_AA
+        rndPL_pk = rndPL_AA * rndPL_pk
+        
+        rndPL_x0 = (1d0*(k0-1))**(-gama+1d0)
+        rndPL_xc = (1d0*kc)**(-gama+1d0)
+        rndPL_expo = 1d0/(1d0-gama)
+        
+    end subroutine
+    
+    function rnd_PL()
+        real*8 :: z, x
+        integer :: j, rnd_PL
+        
+        do
+            z = rnd()
+            x = (rndPL_x0 - z*(rndPL_x0 - rndPL_xc))**rndPL_expo
+            j = ceiling(x)
+            
+            z = rnd()
+            
+            if (.not. z*rndPL_AA / (x**rndPL_gama) >= rndPL_pk(j)) exit
+            
+        enddo
+        
+        rnd_PL = j
+        
+    end function
+    ! / SPECIFIC FOR PL: IF NOT USED, CAN DELETE
     
 end module
