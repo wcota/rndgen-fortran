@@ -32,9 +32,10 @@ implicit none
     enddo
     
     write(*,*) ""
-    write(*,*) "Escrevendo ambos juntos após resetar. Deve dar a mesma sequência, invertidas"
-    call geradores(1)%reset()
-    call geradores(2)%reset()
+    write(*,*) "Escrevendo ambos juntos após inverter as sementes. Deve dar a mesma sequência individualmente!"
+    aux = geradores(1)%o_iseed
+    call geradores(1)%init(geradores(2)%o_iseed)
+    call geradores(2)%init(aux)
     do i = 1,10
         print*, geradores(1)%rnd(), geradores(2)%rnd()
     enddo

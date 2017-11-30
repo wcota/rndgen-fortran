@@ -42,14 +42,29 @@ implicit none
     type :: rndgen
         integer :: o_iseed                      ! original seed
         integer(i4b), private :: x,y,z,w        ! working variables for the four generators
+        
         contains
             procedure :: rnd => p__rndgen_rnd
             procedure :: int => p__rndgen_rndint
             
             procedure :: init => p__rndgen_rndinit
             procedure :: reset => p__rndgen_rndreset
+            
     end type
-
+    
+    ! SPECIFIC FOR PL: IF NOT USED, CAN DELETE
+    ! Adapted from Silvio C. Ferreira code
+    type, extends(rndgen) :: rndgenPL
+        real*8, private :: rndPL_AA, rndPL_expo, rndPL_x0, rndPL_xc
+        real*8 :: rndPL_gama
+        integer :: rndPL_k0, rndPL_kc
+        real*8, private, allocatable :: rndPL_pk(:)
+        contains
+            procedure :: rndPL => p__rndgenPL_rnd_PL
+            procedure :: initPL => p__rndgenPL_rnd_PL_init
+    end type
+    ! / SPECIFIC FOR PL: IF NOT USED, CAN DELETE
+    
 contains
 
     function p__rndgen_rnd(this) ! KISS
@@ -149,5 +164,58 @@ contains
         
         p__rndgen_rndint = min(int(this%rnd()*(i2+1-i1))+i1,i2)
     end function
+
+    ! SPECIFIC FOR PL: IF NOT USED, CAN DELETE
+    ! Adapted from Silvio C. Ferreira code
+    subroutine p__rndgenPL_rnd_PL_init(this,k0,kc,gama,iseed)
+        class(rndgenPL) :: this
+        integer, intent(in) :: k0, kc
+        real*8, intent(in) :: gama
+        integer, intent(in), optional :: iseed
+        integer :: j
+        
+        if (present(iseed)) call this%init(iseed)
+        
+        this%rndPL_k0 = k0
+        this%rndPL_kc = kc
+        this%rndPL_gama = gama
+        
+        if (allocated(this%rndPL_pk)) deallocate(this%rndPL_pk)
+        allocate(this%rndPL_pk(k0:kc))
+        
+        this%rndPL_AA = 0d0
+        do j=k0,kc
+            this%rndPL_AA=this%rndPL_AA + (1d0*j)**(-gama)
+            this%rndPL_pk(j) = (1d0*j)**(-gama)
+        enddo
+        this%rndPL_AA = 1d0/this%rndPL_AA
+        this%rndPL_pk = this%rndPL_AA * this%rndPL_pk
+        
+        this%rndPL_x0 = (1d0*(k0-1))**(-gama+1d0)
+        this%rndPL_xc = (1d0*kc)**(-gama+1d0)
+        this%rndPL_expo = 1d0/(1d0-gama)
+        
+    end subroutine
+    
+    function p__rndgenPL_rnd_PL(this)
+        class(rndgenPL) :: this
+        real*8 :: z, x
+        integer :: j, p__rndgenPL_rnd_PL
+        
+        do
+            z = this%rnd()
+            x = (this%rndPL_x0 - z*(this%rndPL_x0 - this%rndPL_xc))**this%rndPL_expo
+            j = ceiling(x)
+            
+            z = this%rnd()
+            
+            if (.not. z*this%rndPL_AA / (x**this%rndPL_gama) >= this%rndPL_pk(j)) exit
+            
+        enddo
+        
+        p__rndgenPL_rnd_PL = j
+        
+    end function
+    ! / SPECIFIC FOR PL: IF NOT USED, CAN DELETE
     
 end module
