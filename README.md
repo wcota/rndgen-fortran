@@ -25,10 +25,11 @@ Expected output: `examples/output-example-2gen.txt`
 
 - Include the file in your code: `include '../mod_rndgen.f90'`
 - Use the module after the `program`: `use mod_rndgen`
-- Declare a generator as `type(rndgen) :: gerador`
-- Initialize it with a seed: `call gerador%init(23242394)`
-- Print a random real number U(0,1): `print*, gerador%rnd()`
-- Print a integer between `a` and `b`: `print*, gerador%int(a,b)`
-- Reset the generator: `call gerador%reset()`
+- Declare a generator as `type(rndgen) :: generator`
+- Initialize it with a seed: `call generator%init(23242394)`
+- Print a random real number U(0,1): `print*, generator%rnd()`
+- Print a integer between `a` and `b`: `print*, generator%int(a,b)`
+- Reset the generator: `call generator%reset()`
 
 #### TODO: instructions of rndgenPL
+
