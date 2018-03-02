@@ -5,24 +5,26 @@
 ### How to compile and run:
 
 ```
-$ ifort mod_rndgen_multiple.f90 example.f90
-$ ./a.out
+$ gfortran examples/example.f90 -o example
+$ ./example
 ```
 
-Expected output: `output-example.txt`
+Expected output: `examples/output-example.txt`
 
 **Using two independent generators:**
 
 ```
-$ ifort mod_rndgen_multiple.f90 example-2gen.f90
-$ ./a.out 21382144 21382147 # seed1 seed2
+$ gfortran examples/example-2gen.f90 -o example-2gen
+$ ./example-2gen 21382144 21382147 # seed1 seed2
 ```
 
-Expected output: `output-example-2gen.txt`
+Expected output: `examples/output-example-2gen.txt`
 
 
 ### Commands:
 
+- Include the file in your code: `include '../mod_rndgen.f90'`
+- Use the module after the `program`: `use mod_rndgen`
 - Declare a generator as `type(rndgen) :: gerador`
 - Initialize it with a seed: `call gerador%init(23242394)`
 - Print a random real number U(0,1): `print*, gerador%rnd()`
