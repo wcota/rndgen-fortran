@@ -26,8 +26,8 @@
 ! Author    : Wesley Cota
 ! Email     : wesley.cota@ufv.br
 ! Homepage  : http://wcota.me
-! Date      : 29 Nov 2017
-! Version   : 0.1
+! Date      : 22 Feb 2019
+! Version   : 0.2
 !-----------------------------------------------------------------------------
 
 module mod_rndgen
@@ -37,19 +37,30 @@ implicit none
 
     integer,parameter,private      :: r8b= SELECTED_REAL_KIND(P=14,R=99)   ! 8-byte reals
     integer,parameter,private      :: i4b= SELECTED_INT_KIND(8)            ! 4-byte integers 
-    real(r8b),parameter,private    :: am=4.656612873077392578d-10       ! multiplier 1/2^31
+    real(r8b),parameter,private    :: am=4.656612873077392578d-10          ! multiplier 1/2^31
     
-
-    type :: rndgen
-        integer :: o_iseed                      ! original seed
-        integer(i4b), private :: x,y,z,w        ! working variables for the four generators
+    type :: rndSeed
+        integer(i4b), private :: mseed(4)
         
         contains
+            procedure :: saveToFile => p__rndSeed_saveToFile
+            procedure :: readFromFile => p__rndSeed_readFromFile
+    end type
+
+    type :: rndgen
+        integer :: o_iseed                           ! original seed
+        integer(i4b), private :: mseed(4)            ! working variables for the four generators
+        
+        contains
+        
             procedure :: rnd => p__rndgen_rnd
             procedure :: int => p__rndgen_rndint
             
             procedure :: init => p__rndgen_rndinit
             procedure :: reset => p__rndgen_rndreset
+            
+            procedure :: save_seed => p__rndgen_save_seed
+            procedure :: read_seed => p__rndgen_read_seed
             
     end type
     
@@ -76,12 +87,12 @@ contains
         real(r8b)              :: p__rndgen_rnd
         integer(i4b)           :: kiss
 
-        this%x = 69069 * this%x + 1327217885
-        this%y = ieor (this%y, ishft (this%y, 13)); this%y= ieor (this%y, ishft (this%y, -17)); 
-        this%y= ieor (this%y, ishft (this%y, 5))
-        this%z = 18000 * iand (this%z, 65535) + ishft (this%z, - 16)
-        this%w = 30903 * iand (this%w, 65535) + ishft (this%w, - 16)
-        kiss = ishft(this%x + this%y + ishft (this%z, 16) + this%w , -1)
+        this%mseed(1) = 69069 * this%mseed(1) + 1327217885
+        this%mseed(2) = ieor (this%mseed(2), ishft (this%mseed(2), 13)); this%mseed(2)= ieor (this%mseed(2), ishft (this%mseed(2), -17)); 
+        this%mseed(2) = ieor (this%mseed(2), ishft (this%mseed(2), 5))
+        this%mseed(3) = 18000 * iand (this%mseed(3), 65535) + ishft (this%mseed(3), - 16)
+        this%mseed(4) = 30903 * iand (this%mseed(4), 65535) + ishft (this%mseed(4), - 16)
+        kiss = ishft(this%mseed(1) + this%mseed(2) + ishft (this%mseed(3), 16) + this%mseed(4) , -1)
         p__rndgen_rnd=kiss*am
     end function
     
@@ -124,33 +135,33 @@ contains
         idum=IA*(idum-k*IQ)-IR*k
         if (idum.lt.0) idum = idum + IM
         if (idum.lt.1) then
-                this%x=idum+1
+                this%mseed(1)=idum+1
             else 
-                this%x=idum
+                this%mseed(1)=idum
         endif
         k=(idum)/IQ
         idum=IA*(idum-k*IQ)-IR*k
         if (idum.lt.0) idum = idum + IM
         if (idum.lt.1) then 
-                this%y=idum+1 
+                this%mseed(2)=idum+1 
             else 
-                this%y=idum
+                this%mseed(2)=idum
         endif
         k=(idum)/IQ
         idum=IA*(idum-k*IQ)-IR*k
         if (idum.lt.0) idum = idum + IM
         if (idum.lt.1) then
-                this%z=idum+1 
+                this%mseed(3)=idum+1 
         else 
-                this%z=idum
+                this%mseed(3)=idum
         endif
         k=(idum)/IQ
         idum=IA*(idum-k*IQ)-IR*k
         if (idum.lt.0) idum = idum + IM
         if (idum.lt.1) then
-                this%w=idum+1 
+                this%mseed(4)=idum+1 
             else 
-        this%w=idum
+        this%mseed(4)=idum
         endif
 
         rdum=this%rnd()
@@ -165,6 +176,50 @@ contains
         
         p__rndgen_rndint = min(int(this%rnd()*(i2+1-i1))+i1,i2)
     end function
+    
+    ! save seed procedures
+    subroutine p__rndgen_save_seed(this, u_mseed, und)
+        implicit none
+        class(rndgen) :: this
+        type(rndSeed), intent(out) :: u_mseed
+        integer, intent(in), optional :: und
+        
+        u_mseed%mseed = this%mseed
+        
+        if (present(und)) call u_mseed%saveToFile(und)
+    
+    end subroutine
+
+    subroutine p__rndgen_read_seed(this, u_mseed, und)
+        implicit none
+        class(rndgen) :: this
+        type(rndSeed), intent(in) :: u_mseed
+        integer, intent(in), optional :: und
+        
+        if (present(und)) call u_mseed%readFromFile(und)
+        
+        this%mseed = u_mseed%mseed
+    
+    end subroutine
+
+    subroutine p__rndSeed_saveToFile(this, und)
+        implicit none
+        class(rndSeed) :: this
+        integer, intent(in) :: und
+        
+        write(und, '(4i)') this%mseed
+    
+    end subroutine
+
+    subroutine p__rndSeed_readFromFile(this, und)
+        implicit none
+        class(rndSeed) :: this
+        integer, intent(in) :: und
+        
+        read(und, '(4i)') this%mseed
+    
+    end subroutine
+    ! / save seed procedures
 
     ! SPECIFIC FOR PL: IF NOT USED, CAN DELETE
     ! Adapted from Silvio C. Ferreira code
