@@ -88,7 +88,8 @@ contains
         integer(i4b)           :: kiss
 
         this%mseed(1) = 69069 * this%mseed(1) + 1327217885
-        this%mseed(2) = ieor (this%mseed(2), ishft (this%mseed(2), 13)); this%mseed(2)= ieor (this%mseed(2), ishft (this%mseed(2), -17)); 
+        this%mseed(2) = ieor (this%mseed(2), ishft (this%mseed(2), 13));
+        this%mseed(2) = ieor (this%mseed(2), ishft (this%mseed(2), -17)); 
         this%mseed(2) = ieor (this%mseed(2), ishft (this%mseed(2), 5))
         this%mseed(3) = 18000 * iand (this%mseed(3), 65535) + ishft (this%mseed(3), - 16)
         this%mseed(4) = 30903 * iand (this%mseed(4), 65535) + ishft (this%mseed(4), - 16)
@@ -207,7 +208,7 @@ contains
         class(rndSeed) :: this
         integer, intent(in) :: und
         
-        write(und, '(4i)') this%mseed
+        write(und, *) this%mseed
     
     end subroutine
 
@@ -216,7 +217,7 @@ contains
         class(rndSeed) :: this
         integer, intent(in) :: und
         
-        read(und, '(4i)') this%mseed
+        read(und, *) this%mseed
     
     end subroutine
     ! / save seed procedures
