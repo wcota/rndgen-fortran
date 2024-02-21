@@ -1,5 +1,3 @@
-include '../mod_rndgen.f90'
-
 program example
 use mod_rndgen
 implicit none

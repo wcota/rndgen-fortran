@@ -23,7 +23,7 @@ Expected output: `examples/output-example-2gen.txt`
 
 ### Commands:
 
-- Include the file in your code: `include '../mod_rndgen.f90'`
+- Include the file in your code: ``
 - Use the module after the `program`: `use mod_rndgen`
 - Declare a generator as `type(rndgen) :: generator`
 - Initialize it with a seed: `call generator%init(23242394)`
