@@ -98,7 +98,7 @@ To generate the number, use `generatorPL%rndPL()`.
 
 Using Fpm, execute:
 
-```fortran
+```bash
 fpm test example
 ```
 
