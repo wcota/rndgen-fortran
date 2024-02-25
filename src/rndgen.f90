@@ -30,7 +30,7 @@
 ! Version   : 0.3
 !-----------------------------------------------------------------------------
 
-module mod_rndgen
+module rndgen_mod
    implicit none
 
    public :: rndgen
