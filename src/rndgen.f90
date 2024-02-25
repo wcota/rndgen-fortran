@@ -1,4 +1,4 @@
-! ## File: mod_random.f90
+! ## File: rndgen.f90
 ! ## - module: random number generator. This is just a module to be used in another program.
 ! ## See README.md for more information and use
 !-----------------------------------------------------------------------------
@@ -26,94 +26,92 @@
 ! Author    : Wesley Cota
 ! Email     : wesley@wcota.me
 ! Homepage  : http://wcota.me
-! Date      : 21 Feb 2024
-! Version   : 0.3
+! Date      : 25 Feb 2024
+! Version   : 0.3.1
 !-----------------------------------------------------------------------------
 
 module rndgen_mod
    implicit none
+   private
 
-   public :: rndgen
+   integer, parameter :: dp = selected_real_kind(15) ! 8-byte reals
+   integer, parameter :: i8 = selected_int_kind(8) ! 4-byte integers
+   real(kind=dp), parameter :: am = 4.656612873077392578d-10 ! multiplier 1/2^31
 
-   integer, parameter, private      :: r8b = SELECTED_REAL_KIND(P=14, R=99)   ! 8-byte reals
-   integer, parameter, private      :: i4b = SELECTED_INT_KIND(8)            ! 4-byte integers
-   real(r8b), parameter, private    :: am = 4.656612873077392578d-10          ! multiplier 1/2^31
-
+   !> Random seeds object
    type :: rndSeed
-      integer(i4b), private :: mseed(4)
-
+      integer(kind=i8), private :: mseed(4)
    contains
-      procedure :: saveToFile => p__rndSeed_saveToFile
-      procedure :: readFromFile => p__rndSeed_readFromFile
+      procedure :: saveToFile => saveToFile_rndSeed
+      procedure :: readFromFile => readFromFile_rndSeed
    end type
 
+   !> Random number generator object with its procedures
    type :: rndgen
-      integer :: o_iseed                           ! original seed
-      integer(i4b), private :: mseed(4)            ! working variables for the four generators
+      integer :: o_iseed ! seed used to generate the four new seeds
+      type(rndSeed) :: seed
 
    contains
 
-      procedure :: rnd => p__rndgen_rnd
-      procedure :: int => p__rndgen_rndint
+      procedure :: rnd => rnd_rndgen, int_rndgen, real_rndgen ! both uniform and integer random generators
 
-      procedure :: init => p__rndgen_rndinit
-      procedure :: reset => p__rndgen_rndreset
+      procedure :: init => init_rndgen
+      procedure :: reset => reset_rndgen
 
-      procedure :: save_seed => p__rndgen_save_seed
-      procedure :: read_seed => p__rndgen_read_seed
+      procedure :: save_seed => save_seed_rndgen
+      procedure :: read_seed => read_seed_rndgen
 
    end type
 
-   ! SPECIFIC FOR PL: IF NOT USED, CAN DELETE
-   ! Adapted from Silvio C. Ferreira code
-   type, extends(rndgen) :: rndgenPL
-      real*8, private :: rndPL_AA, rndPL_expo, rndPL_x0, rndPL_xc
-      real*8 :: rndPL_gama
-      integer :: rndPL_k0, rndPL_kc
-      real*8, private, allocatable :: rndPL_pk(:)
-   contains
-      procedure :: rndPL => p__rndgenPL_rnd_PL
-      procedure :: initPL => p__rndgenPL_rnd_PL_init
-   end type
-   ! / SPECIFIC FOR PL: IF NOT USED, CAN DELETE
+   public :: rndgen, rndSeed
 
 contains
-
-   function p__rndgen_rnd(this) ! KISS
-      implicit none
+   !> Generates a random number in the range [0, 1)
+   function rnd_rndgen(this) result(rnd_number) ! KISS
+      ! Adapted from <http://web.mst.edu/~vojtat/class_5403/kiss05/rkiss05.f90> by Thomas Vojta
 
       class(rndgen) :: this
+      integer(kind=i8) :: kiss
+      real(kind=dp) :: rnd_number
 
-      real(r8b)              :: p__rndgen_rnd
-      integer(i4b)           :: kiss
+      this%seed%mseed(1) = 69069*this%seed%mseed(1) + 1327217885
+      this%seed%mseed(2) = ieor(this%seed%mseed(2), ishft(this%seed%mseed(2), 13)); 
+      this%seed%mseed(2) = ieor(this%seed%mseed(2), ishft(this%seed%mseed(2), -17)); 
+      this%seed%mseed(2) = ieor(this%seed%mseed(2), ishft(this%seed%mseed(2), 5))
+      this%seed%mseed(3) = 18000*iand(this%seed%mseed(3), 65535) + ishft(this%seed%mseed(3), -16)
+      this%seed%mseed(4) = 30903*iand(this%seed%mseed(4), 65535) + ishft(this%seed%mseed(4), -16)
+      kiss = ishft(this%seed%mseed(1) + this%seed%mseed(2) + ishft(this%seed%mseed(3), 16) + this%seed%mseed(4), -1)
 
-      this%mseed(1) = 69069*this%mseed(1) + 1327217885
-      this%mseed(2) = ieor(this%mseed(2), ishft(this%mseed(2), 13)); 
-      this%mseed(2) = ieor(this%mseed(2), ishft(this%mseed(2), -17)); 
-      this%mseed(2) = ieor(this%mseed(2), ishft(this%mseed(2), 5))
-      this%mseed(3) = 18000*iand(this%mseed(3), 65535) + ishft(this%mseed(3), -16)
-      this%mseed(4) = 30903*iand(this%mseed(4), 65535) + ishft(this%mseed(4), -16)
-      kiss = ishft(this%mseed(1) + this%mseed(2) + ishft(this%mseed(3), 16) + this%mseed(4), -1)
-      p__rndgen_rnd = kiss*am
+      rnd_number = kiss*am ! returns in range [0, 1)
    end function
 
-   subroutine p__rndgen_rndreset(this)
-      implicit none
+   !> Generates a random integer number in the range [i1, i2]
+   function int_rndgen(this, i1, i2) result(rnd_number)
+      class(rndgen) :: this
+      integer, intent(in) :: i1, i2
+      integer(kind=kind(i1)) :: rnd_number
+
+      rnd_number = min(int(rnd_rndgen(this)*(i2 + 1 - i1)) + i1, i2) ! returns in range [i1, i2]
+   end function
+
+   !> Generates a random real number in the range [r1, r2)
+   function real_rndgen(this, r1, r2) result(rnd_number)
+      class(rndgen) :: this
+      real, intent(in) :: r1, r2
+      real(kind=kind(r1)) :: rnd_number
+
+      rnd_number = r1 + (r2 - r1)*rnd_rndgen(this) ! returns in range [r1, r2)
+   end function
+
+   !> Initializes the random number generator
+   subroutine init_rndgen(this, iseed)
+      ! Adapted from <http://web.mst.edu/~vojtat/class_5403/kiss05/rkiss05.f90> by Thomas Vojta
 
       class(rndgen) :: this
 
-      call this%init(this%o_iseed)
-   end subroutine
-
-   subroutine p__rndgen_rndinit(this, iseed)
-      !use ifport
-      implicit none
-
-      class(rndgen) :: this
-
-      integer(i4b)          :: idum, ia, im, iq, ir, iseed
-      integer(i4b)          :: k, c1
-      real(r8b)             :: rdum
+      integer(kind=i8) :: idum, ia, im, iq, ir, iseed
+      integer(kind=i8) :: k, c1
+      real(kind=dp) :: rdum
 
       parameter(ia=16807, im=2147483647, iq=127773, ir=2836)
 
@@ -121,158 +119,103 @@ contains
 
       this%o_iseed = iseed
 
-        !!! Test integer representation !!!
+      !!! Test integer representation !!!
       c1 = -8
       c1 = ishftc(c1, -3)
       !     print *,c1
-      if (c1 .ne. 536870911) stop 'Nonstandard integer representation. Stopped.'
+      if (c1 /= 536870911) stop 'Nonstandard integer representation. Stopped.'
 
       idum = iseed
       idum = abs(1099087573*idum)               ! 32-bit LCG to shuffle seeds
-      if (idum .eq. 0) idum = 1
-      if (idum .ge. IM) idum = IM - 1
+      if (idum == 0) idum = 1
+      if (idum >= IM) idum = IM - 1
 
       k = (idum)/IQ
       idum = IA*(idum - k*IQ) - IR*k
-      if (idum .lt. 0) idum = idum + IM
-      if (idum .lt. 1) then
-         this%mseed(1) = idum + 1
+      if (idum < 0) idum = idum + IM
+      if (idum < 1) then
+         this%seed%mseed(1) = idum + 1
       else
-         this%mseed(1) = idum
+         this%seed%mseed(1) = idum
       end if
       k = (idum)/IQ
       idum = IA*(idum - k*IQ) - IR*k
-      if (idum .lt. 0) idum = idum + IM
-      if (idum .lt. 1) then
-         this%mseed(2) = idum + 1
+      if (idum < 0) idum = idum + IM
+      if (idum < 1) then
+         this%seed%mseed(2) = idum + 1
       else
-         this%mseed(2) = idum
+         this%seed%mseed(2) = idum
       end if
       k = (idum)/IQ
       idum = IA*(idum - k*IQ) - IR*k
-      if (idum .lt. 0) idum = idum + IM
-      if (idum .lt. 1) then
-         this%mseed(3) = idum + 1
+      if (idum < 0) idum = idum + IM
+      if (idum < 1) then
+         this%seed%mseed(3) = idum + 1
       else
-         this%mseed(3) = idum
+         this%seed%mseed(3) = idum
       end if
       k = (idum)/IQ
       idum = IA*(idum - k*IQ) - IR*k
-      if (idum .lt. 0) idum = idum + IM
-      if (idum .lt. 1) then
-         this%mseed(4) = idum + 1
+      if (idum < 0) idum = idum + IM
+      if (idum < 1) then
+         this%seed%mseed(4) = idum + 1
       else
-         this%mseed(4) = idum
+         this%seed%mseed(4) = idum
       end if
 
-      rdum = this%rnd()
-
-      return
+      rdum = this%rnd() ! warm up the generator with the first random number
    end subroutine
 
-   function p__rndgen_rndint(this, i1, i2)
+   !> Resets the random number generator
+   subroutine reset_rndgen(this)
       class(rndgen) :: this
-      integer, intent(in) :: i1, i2
-      integer             :: p__rndgen_rndint
 
-      p__rndgen_rndint = min(int(this%rnd()*(i2 + 1 - i1)) + i1, i2)
-   end function
+      call this%init(this%o_iseed)
+   end subroutine
 
-   ! save seed procedures
-   subroutine p__rndgen_save_seed(this, u_mseed, und)
-      implicit none
+   !> Save the current seeds to a seeds object and, optionally, to a file unit
+   subroutine save_seed_rndgen(this, u_mseed, und)
       class(rndgen) :: this
       type(rndSeed), intent(out) :: u_mseed
       integer, intent(in), optional :: und
 
-      u_mseed%mseed = this%mseed
+      u_mseed = this%seed
 
       if (present(und)) call u_mseed%saveToFile(und)
 
    end subroutine
 
-   subroutine p__rndgen_read_seed(this, u_mseed, und)
-      implicit none
+   !> Read the seeds from a seeds object or, optionally, from a file unit
+   subroutine read_seed_rndgen(this, u_mseed, und)
       class(rndgen) :: this
       type(rndSeed), intent(in) :: u_mseed
       integer, intent(in), optional :: und
 
       if (present(und)) call u_mseed%readFromFile(und)
 
-      this%mseed = u_mseed%mseed
+      this%seed = u_mseed
 
    end subroutine
 
-   subroutine p__rndSeed_saveToFile(this, und)
+   !> Save the seeds to a file unit
+   subroutine saveToFile_rndSeed(this, und)
       implicit none
       class(rndSeed) :: this
       integer, intent(in) :: und
+      integer :: i
 
-      write (und, *) this%mseed
+      write (und, '(4i0)') (this%mseed(i), i=1, 4)
 
    end subroutine
 
-   subroutine p__rndSeed_readFromFile(this, und)
-      implicit none
+   !> Read the seeds from a file unit
+   subroutine readFromFile_rndSeed(this, und)
       class(rndSeed) :: this
       integer, intent(in) :: und
+      integer :: i
 
-      read (und, *) this%mseed
-
-   end subroutine
-   ! / save seed procedures
-
-   ! SPECIFIC FOR PL: IF NOT USED, CAN DELETE
-   ! Adapted from Silvio C. Ferreira code
-   subroutine p__rndgenPL_rnd_PL_init(this, k0, kc, gama, iseed)
-      class(rndgenPL) :: this
-      integer, intent(in) :: k0, kc
-      real*8, intent(in) :: gama
-      integer, intent(in), optional :: iseed
-      integer :: j
-
-      if (present(iseed)) call this%init(iseed)
-
-      this%rndPL_k0 = k0
-      this%rndPL_kc = kc
-      this%rndPL_gama = gama
-
-      if (allocated(this%rndPL_pk)) deallocate (this%rndPL_pk)
-      allocate (this%rndPL_pk(k0:kc))
-
-      this%rndPL_AA = 0d0
-      do j = k0, kc
-         this%rndPL_AA = this%rndPL_AA + (1d0*j)**(-gama)
-         this%rndPL_pk(j) = (1d0*j)**(-gama)
-      end do
-      this%rndPL_AA = 1d0/this%rndPL_AA
-      this%rndPL_pk = this%rndPL_AA*this%rndPL_pk
-
-      this%rndPL_x0 = (1d0*(k0 - 1))**(-gama + 1d0)
-      this%rndPL_xc = (1d0*kc)**(-gama + 1d0)
-      this%rndPL_expo = 1d0/(1d0 - gama)
+      read (und, *) (this%mseed(i), i=1, 4)
 
    end subroutine
-
-   function p__rndgenPL_rnd_PL(this)
-      class(rndgenPL) :: this
-      real*8 :: z, x
-      integer :: j, p__rndgenPL_rnd_PL
-
-      do
-         z = this%rnd()
-         x = (this%rndPL_x0 - z*(this%rndPL_x0 - this%rndPL_xc))**this%rndPL_expo
-         j = ceiling(x)
-
-         z = this%rnd()
-
-         if (.not. z*this%rndPL_AA/(x**this%rndPL_gama) >= this%rndPL_pk(j)) exit
-
-      end do
-
-      p__rndgenPL_rnd_PL = j
-
-   end function
-   ! / SPECIFIC FOR PL: IF NOT USED, CAN DELETE
 
 end module
