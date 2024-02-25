@@ -105,6 +105,7 @@ fpm test example
 to run the first example. The list of examples is as follows:
 
 - `example`: Generates 10 random numbers between 0 and 1, integers between 5 and 2587, and floats between -5.2 and 100.9, resets, and repeats the process.
+- `example-vojta`: Original example by Thomas Vojta, from <https://web.mst.edu/vojtat/class_5403/kiss05/rtest.f90>
 - `example-save`: Generates 10 random numbers, resets, and saves the state after 5 runs. Then, reads from the file.
 - `example-2gen`: Runs two generators simultaneously. Usage: `fpm test example-2gen -- seed1 seed2`
 - `example-2gen-invert`: Same as the previous example, but swaps the seeds after a reset.
