@@ -1,12 +1,12 @@
-# Fortran module: RNDGEN
+# Fortran Module: RNDGEN
 
 ## Description
 
-KISS random number generator as object in Fortran, to use multiple and independent generators.
+The Fortran module `RNDGEN` implements the KISS (Keep It Simple Stupid) random number generator as an object, facilitating the usage of multiple and independent generators.
 
-The code was adapted from <http://web.mst.edu/~vojtat/class_5403/kiss05/rkiss05.f90>, implemented by [Thomas Vojta](http://thomasvojta.com/).
+The code adaptation is derived from [Thomas Vojta](http://thomasvojta.com/)'s implementation available at [http://web.mst.edu/~vojtat/class_5403/kiss05/rkiss05.f90](http://web.mst.edu/~vojtat/class_5403/kiss05/rkiss05.f90).
 
-From the original source, <http://web.mst.edu/~vojtat/class_5403/kiss05/rkiss05.f90>:
+For reference, the original source code can be found [here](http://web.mst.edu/~vojtat/class_5403/kiss05/rkiss05.f90), with the following information:
 
 ```txt
 ! Random number generator KISS05 after a suggestion by George Marsaglia
@@ -44,14 +44,14 @@ From the original source, <http://web.mst.edu/~vojtat/class_5403/kiss05/rkiss05.
 
 ## Usage
 
-Copy the file `src/rndgen.f90` or add the package as a dependence using the [Fortran Package Manager](https://fpm.fortran-lang.org/) (Fpm):
+Copy the file `src/rndgen.f90` or add the package as a dependency using the [Fortran Package Manager](https://fpm.fortran-lang.org/) (Fpm):
 
 ```toml
 [dependencies]
 rndgen-fortran.git = "https://github.com/wcota/rndgen-fortran"
 ```
 
-Import the module using `use rndgen_mod`, or/and `use rndgenPL_mod` for power-law number generator.
+Import the module using `use rndgen_mod`, and/or `use rndgenPL_mod` for the power-law number generator.
 
 Create the generator object by using
 
@@ -59,57 +59,57 @@ Create the generator object by using
 type(rndgen) :: generator
 ```
 
-The generator needs a positive integer as seed to initialize the generator with Park/Millers minimal standard LCG:
+The generator requires a positive integer as a seed to initialize the generator with Park/Millers minimal standard LCG:
 
 ```fortran
 integer :: seed = 294727492
 call generator%init(seed)
 ```
 
-To generate a random number, run:
+To generate a random number, use:
 
-- `generator%rnd()` for a real number in range [0,1)
-- `generator%int(i1,i2)` for an integer number in range [i1,i2]
-- `generator%real(r1,r2)` for an real number in range [r1,r2)
+- `generator%rnd()` for a real number in the range [0,1)
+- `generator%int(i1, i2)` for an integer number in the range [i1, i2]
+- `generator%real(r1, r2)` for a real number in the range [r1, r2)
 
 Reset the generator (to start again with the same sequence) with `generator%reset()`.
 
 ### `rndSeed` IO
 
-It is possible to save and read the generated seeds. For that, and `rndSeed` object needs to be declared as
+It is possible to save and read the generated seeds. For that, an `rndSeed` object needs to be declared as
 
 ```fortran
 type(rndSeed) :: seeds
 ```
 
-To save, use `call generator%save_seed(seeds, file_unit)`, in which `file_unit` refers to an opened file unit. It will save the current seed in the object and also write it in the file unit.
+To save, use `call generator%save_seed(seeds, file_unit)`, where `file_unit` refers to an opened file unit. It will save the current seed in the object and also write it to the file unit.
 
 To read from a `rndSeed` object, use `call generator%read_seed(seeds)`, or to read from a file unit, use `call generator%read_seed(seeds, file_unit)`.
 
 ### Power-law random number generator
 
-The module `rndgenPL_mod` extends the generator to a integer power-law distribution. The code was adapted from [Silvio C. Ferreira](https://sites.google.com/site/silvioferreirajr/home) codes.
+The module `rndgenPL_mod` extends the generator to an integer power-law distribution. The code was adapted from [Silvio C. Ferreira](https://sites.google.com/site/silvioferreirajr/home)'s codes.
 
-Declare the object with `type(rndgenPL) :: generatorPL`, and init it with `call generatorPL%initPL(kmin,kmax,gamma,seed)`, allowing to generate random numbers following a power-law $P(k) \sim k^{-\gamma}$ for $k \in [k_\text{min},k_\text{max}]$. 
+Declare the object with `type(rndgenPL) :: generatorPL`, and initialize it with `call generatorPL%initPL(kmin, kmax, gamma, seed)`, allowing the generation of random numbers following a power-law \(P(k) \sim k^{-\gamma}\) for \(k \in [k_\text{min}, k_\text{max}]\).
 
 To generate the number, use `generatorPL%rndPL()`.
 
 ## Running examples
 
-Using Fpm, just use
+Using Fpm, execute:
 
 ```fortran
 fpm test example
 ```
 
-to run the first example. The list of examples is the following:
+to run the first example. The list of examples is as follows:
 
-- `example`: Generates 10 random numbers between 0 and 1, integers between 5 and 2587, and float between -5.2 and 100.9, resets, and do that again.
-- `example-save`: Generates 10 random numbers, reset, and saves the state after 5 runs. Then, reads from file.
-- `example-2gen`: Run two generators at same time. Usage: `fpm test example-2gen -- seed1 seed2`
-- `example-2gen-invert`: Same as previous, but swap the seeds after reset
+- `example`: Generates 10 random numbers between 0 and 1, integers between 5 and 2587, and floats between -5.2 and 100.9, resets, and repeats the process.
+- `example-save`: Generates 10 random numbers, resets, and saves the state after 5 runs. Then, reads from the file.
+- `example-2gen`: Runs two generators simultaneously. Usage: `fpm test example-2gen -- seed1 seed2`
+- `example-2gen-invert`: Same as the previous example, but swaps the seeds after a reset.
 - `example-PL`: Generates four sequences of power-law distributed random numbers.
 
 Expected outputs are available at `test/output-*.txt`.
 
-Tested with `gfortran`, `ifort` and `ifx` compilers. To use a specific compiler, run with `fpm --compiler=ifort [...]`.
+Tested with `gfortran`, `ifort`, and `ifx` compilers. To use a specific compiler, run with `fpm --compiler=ifort [...]`.
