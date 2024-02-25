@@ -1,5 +1,5 @@
 program example
-use mod_rndgen
+use rndgenPL_mod
 implicit none
 
     integer :: i, j, k
@@ -14,7 +14,7 @@ implicit none
     call generatorPL%initPL(3,int(N**(1d0/2d0)),2.1d0,seed) ! k0, kc, gam, iseed
     
     ! Histogram
-    allocate(pok(generatorPL%rndPL_k0:generatorPL%rndPL_kc))
+    allocate(pok(generatorPL%kmin:generatorPL%kmax))
     
     do j = 1, samples
         ! Reset the generator for each sample
@@ -33,7 +33,7 @@ implicit none
         
         sumc = sum(pok)
         
-        do i=generatorPL%rndPL_k0, generatorPL%rndPL_kc
+        do i=generatorPL%kmin, generatorPL%kmax
             if (pok(i) > 0) write(j,*) i, 1d0*pok(i)/(1d0*sumc)
         enddo
     enddo
