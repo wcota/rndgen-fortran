@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="Documentation for RNDGEN module">
+    <meta name="author" content="Wesley Cota <https://wcota.me/>" >
+    <link rel="icon" href="./favicon.png">
+
+    <title> RNDGEN module </title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="./css/pygments.css" rel="stylesheet">
+    <link href="./css/font-awesome.min.css" rel="stylesheet">
+    <link href="./css/local.css" rel="stylesheet">
+      <link  href="./tipuesearch/tipuesearch.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="./js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="./index.html">RNDGEN module </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="./lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./lists/types.html">Derived Types</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="./search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+      <!-- Main component for a primary marketing message or call to action -->
+      <div class="p-5 mb-4 bg-light border rounded-3" id="jumbotron">
+        
+	<p> Find us on&hellip;</p>
+        <p>
+          <a class="btn btn-lg btn-primary" href="https://github.com/wcota/rndgen-fortran" role="button">GitHub</a>
+        </p>
+      </div>
+
+      <div class="row" id='text'>
+        <div class=col-md-8>
+          <h1>RNDGEN module</h1>
+          <h1>Fortran Module: RNDGEN</h1>
+<h2>Description</h2>
+<p>The Fortran module <code>RNDGEN</code> implements the KISS (Keep It Simple Stupid) random number generator as an object, facilitating the usage of multiple and independent generators.</p>
+<p>The code adaptation is derived from <a href="http://thomasvojta.com/">Thomas Vojta</a>'s implementation available at <a href="http://web.mst.edu/~vojtat/class_5403/kiss05/rkiss05.f90">http://web.mst.edu/~vojtat/class_5403/kiss05/rkiss05.f90</a>.</p>
+<p>For reference, the original source code can be found <a href="http://web.mst.edu/~vojtat/class_5403/kiss05/rkiss05.f90">here</a>, with the following information:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">!</span><span class="w"> </span><span class="nx">Random</span><span class="w"> </span><span class="nx">number</span><span class="w"> </span><span class="nx">generator</span><span class="w"> </span><span class="nx">KISS05</span><span class="w"> </span><span class="nx">after</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="nx">suggestion</span><span class="w"> </span><span class="nx">by</span><span class="w"> </span><span class="nx">George</span><span class="w"> </span><span class="nx">Marsaglia</span>
+<span class="p">!</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s">&quot;Random numbers for C: The END?&quot;</span><span class="w"> </span><span class="nx">posted</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="nx">sci</span><span class="p">.</span><span class="nx">crypt</span><span class="p">.</span><span class="nx">random</span><span class="o">-</span><span class="nx">numbers</span>
+<span class="p">!</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1999</span>
+<span class="p">!</span>
+<span class="p">!</span><span class="w"> </span><span class="nx">version</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s">&quot;double precision RNGs&quot;</span><span class="w"> </span><span class="k">in</span><span class="w">  </span><span class="nx">sci</span><span class="p">.</span><span class="nx">math</span><span class="p">.</span><span class="nx">num</span><span class="o">-</span><span class="nx">analysis</span><span class="w">  </span>
+<span class="p">!</span><span class="w"> </span><span class="nx">http</span><span class="p">:</span><span class="c1">//sci.tech-archive.net/Archive/sci.math.num-analysis/2005-11/msg00352.html</span>
+<span class="p">!</span>
+<span class="p">!</span><span class="w"> </span><span class="nx">The</span><span class="w">  </span><span class="nx">KISS</span><span class="w"> </span><span class="p">(</span><span class="nx">Keep</span><span class="w"> </span><span class="nx">It</span><span class="w"> </span><span class="nx">Simple</span><span class="w"> </span><span class="nx">Stupid</span><span class="p">)</span><span class="w"> </span><span class="nx">random</span><span class="w"> </span><span class="nx">number</span><span class="w"> </span><span class="nx">generator</span><span class="p">.</span><span class="w"> </span><span class="nx">Combines</span><span class="p">:</span>
+<span class="p">!</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="nx">The</span><span class="w"> </span><span class="nx">congruential</span><span class="w"> </span><span class="nx">generator</span><span class="w"> </span><span class="nx">x</span><span class="p">(</span><span class="nx">n</span><span class="p">)=</span><span class="mi">69069</span><span class="o">*</span><span class="nx">x</span><span class="p">(</span><span class="nx">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">1327217885</span><span class="p">,</span><span class="w"> </span><span class="nx">period</span><span class="w"> </span><span class="mi">2</span><span class="o">^</span><span class="mi">32</span><span class="p">.</span>
+<span class="p">!</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="nx">A</span><span class="w"> </span><span class="mi">3</span><span class="o">-</span><span class="nx">shift</span><span class="w"> </span><span class="nx">shift</span><span class="o">-</span><span class="nx">register</span><span class="w"> </span><span class="nx">generator</span><span class="p">,</span><span class="w"> </span><span class="nx">period</span><span class="w"> </span><span class="mi">2</span><span class="o">^</span><span class="mi">32</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">!</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="nx">Two</span><span class="w"> </span><span class="mi">16</span><span class="o">-</span><span class="nx">bit</span><span class="w"> </span><span class="nx">multiply</span><span class="o">-</span><span class="nx">with</span><span class="o">-</span><span class="nx">carry</span><span class="w"> </span><span class="nx">generators</span><span class="p">,</span><span class="w"> </span><span class="nx">period</span><span class="w"> </span><span class="mi">597273182964842497</span><span class="p">&gt;</span><span class="mi">2</span><span class="o">^</span><span class="mi">59</span>
+<span class="p">!</span><span class="w"> </span><span class="nx">Overall</span><span class="w"> </span><span class="nx">period</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="mi">2</span><span class="o">^</span><span class="mi">123</span><span class="w">  </span>
+<span class="p">!</span><span class="w"> </span>
+<span class="p">!</span><span class="w"> </span>
+<span class="p">!</span><span class="w"> </span><span class="nx">A</span><span class="w"> </span><span class="nx">call</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">rkiss05</span><span class="p">()</span><span class="w"> </span><span class="nx">gives</span><span class="w"> </span><span class="nx">one</span><span class="w"> </span><span class="nx">random</span><span class="w"> </span><span class="nx">real</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">interval</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>
+<span class="p">!</span><span class="w"> </span><span class="nx">i</span><span class="p">.</span><span class="nx">e</span><span class="p">.,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="nx">rkiss05</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="mi">1</span>
+<span class="p">!</span>
+<span class="p">!</span><span class="w"> </span><span class="nx">Before</span><span class="w"> </span><span class="nx">using</span><span class="w"> </span><span class="nx">rkiss05</span><span class="w"> </span><span class="nx">call</span><span class="w"> </span><span class="nx">kissinit</span><span class="p">(</span><span class="nx">seed</span><span class="p">)</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">initialize</span>
+<span class="p">!</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">generator</span><span class="w"> </span><span class="nx">by</span><span class="w"> </span><span class="nx">random</span><span class="w"> </span><span class="nx">integers</span><span class="w"> </span><span class="nx">produced</span><span class="w"> </span><span class="nx">by</span><span class="w"> </span><span class="nx">Park</span><span class="o">/</span><span class="nx">Millers</span>
+<span class="p">!</span><span class="w"> </span><span class="nx">minimal</span><span class="w"> </span><span class="nx">standard</span><span class="w"> </span><span class="nx">LCG</span><span class="p">.</span>
+<span class="p">!</span><span class="w"> </span><span class="nx">Seed</span><span class="w"> </span><span class="nx">should</span><span class="w"> </span><span class="nx">be</span><span class="w"> </span><span class="nx">any</span><span class="w"> </span><span class="nx">positive</span><span class="w"> </span><span class="nx">integer</span><span class="p">.</span>
+<span class="p">!</span><span class="w"> </span>
+<span class="p">!</span><span class="w"> </span><span class="nx">FORTRAN</span><span class="w"> </span><span class="nx">implementation</span><span class="w"> </span><span class="nx">by</span><span class="w"> </span><span class="nx">Thomas</span><span class="w"> </span><span class="nx">Vojta</span><span class="p">,</span><span class="w"> </span><span class="nx">vojta</span><span class="err">@</span><span class="nx">mst</span><span class="p">.</span><span class="nx">edu</span>
+<span class="p">!</span><span class="w"> </span><span class="nx">built</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="nx">module</span><span class="w"> </span><span class="nx">found</span><span class="w"> </span><span class="nx">at</span><span class="w"> </span><span class="nx">www</span><span class="p">.</span><span class="nx">fortran</span><span class="p">.</span><span class="nx">com</span>
+<span class="p">!</span><span class="w"> </span>
+<span class="p">!</span><span class="w"> </span>
+<span class="p">!</span><span class="w"> </span><span class="nx">History</span><span class="p">:</span>
+<span class="p">!</span><span class="w">        </span><span class="nx">v0</span><span class="m m-Double">.9</span><span class="w">     </span><span class="nx">Dec</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="mi">2010</span><span class="w">    </span><span class="nx">first</span><span class="w"> </span><span class="nx">implementation</span>
+<span class="p">!</span><span class="w">        </span><span class="nx">V0</span><span class="m m-Double">.91</span><span class="w">    </span><span class="nx">Dec</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="mi">2010</span><span class="w">    </span><span class="nx">inlined</span><span class="w"> </span><span class="nx">internal</span><span class="w"> </span><span class="nx">function</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">SR</span><span class="w"> </span><span class="nx">component</span>
+<span class="p">!</span><span class="w">        </span><span class="nx">v0</span><span class="m m-Double">.92</span><span class="w">    </span><span class="nx">Dec</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="mi">2010</span><span class="w">    </span><span class="nx">extra</span><span class="w"> </span><span class="nx">shuffle</span><span class="w"> </span><span class="nx">of</span><span class="w"> </span><span class="nx">seed</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nx">kissinit</span><span class="w"> </span>
+<span class="p">!</span><span class="w">        </span><span class="nx">v093</span><span class="w">     </span><span class="nx">Aug</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="mi">2012</span><span class="w">    </span><span class="nx">changed</span><span class="w"> </span><span class="nx">inter</span><span class="w"> </span><span class="nx">representation</span><span class="w"> </span><span class="nx">test</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">avoid</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="nx">statements</span>
+</code></pre></div>
+
+<h2>Usage</h2>
+<p>Copy the file <code>src/rndgen.f90</code> or add the package as a dependency using the <a href="https://fpm.fortran-lang.org/">Fortran Package Manager</a> (Fpm):</p>
+<div class="codehilite"><pre><span></span><code><span class="k">[dependencies]</span>
+<span class="n">rndgen-fortran</span><span class="p">.</span><span class="n">git</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://github.com/wcota/rndgen-fortran&quot;</span>
+</code></pre></div>
+
+<p>Import the module using <code>use rndgen_mod</code>, and/or <code>use rndgenPL_mod</code> for the power-law number generator.</p>
+<p>Create the generator object by using</p>
+<div class="codehilite"><pre><span></span><code><span class="k">type</span><span class="p">(</span><span class="n">rndgen</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">generator</span>
+</code></pre></div>
+
+<p>The generator requires a positive integer as a seed to initialize the generator with Park/Millers minimal standard LCG:</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">seed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">294727492</span>
+<span class="k">call </span><span class="n">generator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+</code></pre></div>
+
+<p>To generate a random number, use:</p>
+<ul>
+<li><code>generator%rnd()</code> for a real number in the range [0,1)</li>
+<li><code>generator%int(i1, i2)</code> for an integer number in the range [i1, i2]</li>
+<li><code>generator%real(r1, r2)</code> for a real number in the range [r1, r2)</li>
+</ul>
+<p>Reset the generator (to start again with the same sequence) with <code>generator%reset()</code>.</p>
+<h3><code>rndSeed</code> IO</h3>
+<p>It is possible to save and read the generated seeds. For that, an <code>rndSeed</code> object needs to be declared as</p>
+<div class="codehilite"><pre><span></span><code><span class="k">type</span><span class="p">(</span><span class="n">rndSeed</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">seeds</span>
+</code></pre></div>
+
+<p>To save, use <code>call generator%save_seed(seeds, file_unit)</code>, where <code>file_unit</code> refers to an opened file unit. It will save the current seed in the object and also write it to the file unit.</p>
+<p>To read from a <code>rndSeed</code> object, use <code>call generator%read_seed(seeds)</code>, or to read from a file unit, use <code>call generator%read_seed(seeds, file_unit)</code>.</p>
+<h3>Power-law random number generator</h3>
+<p>The module <code>rndgenPL_mod</code> extends the generator to an integer power-law distribution. The code was adapted from <a href="https://sites.google.com/site/silvioferreirajr/home">Silvio C. Ferreira</a>'s codes.</p>
+<p>Declare the object with <code>type(rndgenPL) :: generatorPL</code>, and initialize it with <code>call generatorPL%initPL(kmin, kmax, gamma, seed)</code>, allowing the generation of random numbers following a power-law $P(k) \sim k^{-\gamma}$ for $k \in [k_\text{min}, k_\text{max}]$.</p>
+<p>To generate the number, use <code>generatorPL%rndPL()</code>.</p>
+<h2>Running examples</h2>
+<p>Using Fpm, execute:</p>
+<div class="codehilite"><pre><span></span><code>fpm<span class="w"> </span><span class="nb">test</span><span class="w"> </span>example
+</code></pre></div>
+
+<p>to run the first example. The list of examples is as follows:</p>
+<ul>
+<li><code>example</code>: Generates 10 random numbers between 0 and 1, integers between 5 and 2587, and floats between -5.2 and 100.9, resets, and repeats the process.</li>
+<li><code>example-vojta</code>: Original example by Thomas Vojta, from <a href="https://web.mst.edu/vojtat/class_5403/kiss05/rtest.f90">https://web.mst.edu/vojtat/class_5403/kiss05/rtest.f90</a></li>
+<li><code>example-save</code>: Generates 10 random numbers, resets, and saves the state after 5 runs. Then, reads from the file.</li>
+<li><code>example-2gen</code>: Runs two generators simultaneously. Usage: <code>fpm test example-2gen -- seed1 seed2</code></li>
+<li><code>example-2gen-invert</code>: Same as the previous example, but swaps the seeds after a reset.</li>
+<li><code>example-PL</code>: Generates four sequences of power-law distributed random numbers.</li>
+</ul>
+<p>Expected outputs are available at <code>test/output-*.txt</code>.</p>
+<p>Tested with <code>gfortran</code>, <code>ifort</code>, and <code>ifx</code> compilers. To use a specific compiler, run with <code>fpm --compiler=ifort [...]</code>.</p>
+        </div>
+          <div class="col-md-4">
+	        <div class="card card-body bg-light">
+              <h2 class="card-title">Developer Info</h2>
+              <h4 class="card-text">Wesley Cota <https://wcota.me/></h4>
+              <p class="card-text"><p>Assistant Professor of Physics at Federal University of Viçosa (UFV), Brazil</p></p>
+                <div class="text-center"><div class="btn-group" role="group">
+                      <a class="btn btn-lg btn-primary" href="https://wcota.me"><i class="fa fa-globe fa-lg"></i></a>
+                      <a class="btn btn-lg btn-primary" href="https://github.com/wcota"><i class="fa fa-github fa-lg"></i></a>
+                </div></div>
+            </div>
+          </div>
+      </div>
+        <div class="row">
+          <hr>
+          <div class="col-xs-6 col-sm-3">
+            <div>
+              <h3>Source Files</h3>
+              <ul><li><a href='sourcefile/rndgen.f90.html'>rndgen.f90</a></li><li><a href='sourcefile/rndgenpl.f90.html'>rndgenPL.f90</a></li></ul>
+            </div>
+            <div>
+              <ul>
+                <li><a href="./lists/files.html"><em>All source files&hellip;</em></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-xs-6 col-sm-3">
+            <div>
+              <h3>Modules</h3>
+              <ul><li><a href='module/rndgen_mod.html'>rndgen_mod</a></li><li><a href='module/rndgenpl_mod.html'>rndgenPL_mod</a></li></ul>
+            </div>
+            <div>
+              <ul>
+                <li><a href="./lists/modules.html"><em>All modules&hellip;</em></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-xs-6 col-sm-3">
+            <div>
+              <h3>Procedures</h3>
+              <ul><li><a href='proc/init_rndgen.html'>init_rndgen</a></li><li><a href='proc/initpl_rndgenpl.html'>initPL_rndgenPL</a></li><li><a href='proc/int_rndgen.html'>int_rndgen</a></li><li><a href='proc/read_seed_rndgen.html'>read_seed_rndgen</a></li><li><a href='proc/readfromfile_rndseed.html'>readFromFile_rndSeed</a></li><li><a href='proc/real_rndgen.html'>real_rndgen</a></li><li><a href='proc/reset_rndgen.html'>reset_rndgen</a></li><li><a href='proc/rnd_rndgen.html'>rnd_rndgen</a></li><li><a href='proc/rndpl_rndgenpl.html'>rndPL_rndgenPL</a></li><li><a href='proc/save_seed_rndgen.html'>save_seed_rndgen</a></li></ul>
+            </div>
+            <div>
+              <ul>
+                <li><a href="./lists/procedures.html"><em>All procedures&hellip;</em></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-xs-6 col-sm-3">
+            <div>
+              <h3>Derived Types</h3>
+              <ul><li><a href='type/rndgen.html'>rndgen</a></li><li><a href='type/rndgenpl.html'>rndgenPL</a></li><li><a href='type/rndseed.html'>rndSeed</a></li></ul>
+            </div>
+            <div>
+              <ul>
+                <li><a href="./lists/types.html"><em>All derived types&hellip;</em></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col"><p>RNDGEN module was developed by Wesley Cota <https://wcota.me/><br>&copy; 2024 <a rel="license" href="http://www.gnu.org/licenses/old-licenses/fdl-1.2.en.html">GNU Free Documentation License</a>
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+            </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
+
+    <!-- MathJax JavaScript
+             ================================================== -->
+             <!-- Placed at the end of the document so the pages load faster -->
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({
+          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+          });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+          <script src="./tipuesearch/tipuesearch_content.js"></script>
+          <script src="./tipuesearch/tipuesearch_set.js"></script>
+          <script src="./tipuesearch/tipuesearch.js"></script>
+
+  </body>
+</html>
