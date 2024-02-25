@@ -1,5 +1,5 @@
 program example
-use mod_rndgen
+use rndgen_mod
 implicit none
 
     integer :: i, j

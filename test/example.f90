@@ -1,5 +1,4 @@
 program example
-use mod_rndgen
 implicit none
 
     integer :: i
@@ -36,4 +35,4 @@ implicit none
         write(*,*) generator%int(5,2587)
     enddo
 
-end program
+end program   implicit none
