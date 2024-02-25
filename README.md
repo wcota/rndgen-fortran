@@ -8,7 +8,7 @@ The code was adapted from <http://web.mst.edu/~vojtat/class_5403/kiss05/rkiss05.
 
 From the original source, <http://web.mst.edu/~vojtat/class_5403/kiss05/rkiss05.f90>:
 
-```fortran
+```txt
 ! Random number generator KISS05 after a suggestion by George Marsaglia
 ! in "Random numbers for C: The END?" posted on sci.crypt.random-numbers
 ! in 1999
