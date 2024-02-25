@@ -90,7 +90,7 @@ To read from a `rndSeed` object, use `call generator%read_seed(seeds)`, or to re
 
 The module `rndgenPL_mod` extends the generator to an integer power-law distribution. The code was adapted from [Silvio C. Ferreira](https://sites.google.com/site/silvioferreirajr/home)'s codes.
 
-Declare the object with `type(rndgenPL) :: generatorPL`, and initialize it with `call generatorPL%initPL(kmin, kmax, gamma, seed)`, allowing the generation of random numbers following a power-law \(P(k) \sim k^{-\gamma}\) for \(k \in [k_\text{min}, k_\text{max}]\).
+Declare the object with `type(rndgenPL) :: generatorPL`, and initialize it with `call generatorPL%initPL(kmin, kmax, gamma, seed)`, allowing the generation of random numbers following a power-law $P(k) \sim k^{-\gamma}$ for $k \in [k_\text{min}, k_\text{max}]$.
 
 To generate the number, use `generatorPL%rndPL()`.
 
