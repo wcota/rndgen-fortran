@@ -1,6 +1,6 @@
 ! ## File: rndgen.f90
 ! ## - module: random number generator. This is just a module to be used in another program.
-! ## See README.md for more information and use
+! ## See README.md for more information and usage
 !-----------------------------------------------------------------------------
 ! KISS random generator module, as object: can have multiple and independent generators!
 ! IMPORTANT:
@@ -36,6 +36,7 @@ module rndgen_mod
 
    integer, parameter :: dp = selected_real_kind(15) ! 8-byte reals
    integer, parameter :: i8 = selected_int_kind(8) ! 4-byte integers
+   integer, parameter :: i16 = selected_int_kind(16) ! 8-byte integers
    real(kind=dp), parameter :: am = 4.656612873077392578d-10 ! multiplier 1/2^31
 
    !> Random seeds object
@@ -53,7 +54,9 @@ module rndgen_mod
 
    contains
 
-      procedure :: rnd => rnd_rndgen, int_rndgen, real_rndgen ! both uniform and integer random generators
+      procedure :: rnd => rnd_rndgen ! generates a random number in the range [0, 1)
+      procedure :: int => int_rndgen ! generates a random integer number in the range [i1, i2]
+      procedure :: real => real_rndgen ! generates a random real number in the range [r1, r2)
 
       procedure :: init => init_rndgen
       procedure :: reset => reset_rndgen
@@ -88,19 +91,19 @@ contains
    !> Generates a random integer number in the range [i1, i2]
    function int_rndgen(this, i1, i2) result(rnd_number)
       class(rndgen) :: this
-      integer, intent(in) :: i1, i2
-      integer(kind=kind(i1)) :: rnd_number
+      integer(kind=i16), intent(in) :: i1, i2
+      integer(kind=i16) :: rnd_number
 
-      rnd_number = min(int(rnd_rndgen(this)*(i2 + 1 - i1)) + i1, i2) ! returns in range [i1, i2]
+      rnd_number = min(int(this%rnd()*(i2 + 1 - i1)) + i1, i2) ! returns in range [i1, i2]
    end function
 
    !> Generates a random real number in the range [r1, r2)
    function real_rndgen(this, r1, r2) result(rnd_number)
       class(rndgen) :: this
-      real, intent(in) :: r1, r2
-      real(kind=kind(r1)) :: rnd_number
+      real(kind=dp), intent(in) :: r1, r2
+      real(kind=dp) :: rnd_number
 
-      rnd_number = r1 + (r2 - r1)*rnd_rndgen(this) ! returns in range [r1, r2)
+      rnd_number = r1 + (r2 - r1)*this%rnd() ! returns in range [r1, r2)
    end function
 
    !> Initializes the random number generator
@@ -204,7 +207,7 @@ contains
       integer, intent(in) :: und
       integer :: i
 
-      write (und, '(4i0)') (this%mseed(i), i=1, 4)
+      write (und, *) (this%mseed(i), i=1, 4)
 
    end subroutine
 
