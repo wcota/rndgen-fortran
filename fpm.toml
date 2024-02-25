@@ -1,5 +1,5 @@
 name = "mod_rndgen"
-version = "0.3"
+version = "0.3.1"
 license = "GNU General Public License v3.0"
 author = "Wesley Cota"
 maintainer = "wlcota@gmail.com"
