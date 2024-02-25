@@ -1,4 +1,5 @@
 module rndgenPL_mod
+   use rndgen_mod
    implicit none
    private
 
@@ -6,73 +7,81 @@ module rndgenPL_mod
    integer, parameter :: i8 = selected_int_kind(8) ! 4-byte integers
    real(kind=dp), parameter :: am = 4.656612873077392578d-10 ! multiplier 1/2^31
 
-! SPECIFIC FOR PL: IF NOT USED, CAN DELETE
-   ! Adapted from Silvio C. Ferreira code
+   !> Random number generator object for power-law distribution, adapted from Silvio C. Ferreira code.
+   !> The power-law distribution is given by P(k) = k^(-gamma), where k is an integer between kmin and kmax.
    type, extends(rndgen) :: rndgenPL
-      real*8, private :: rndPL_AA, rndPL_expo, rndPL_x0, rndPL_xc
-      real*8 :: rndPL_gama
-      integer :: rndPL_k0, rndPL_kc
-      real*8, private, allocatable :: rndPL_pk(:)
+      ! auxiliar variables
+      real(kind=dp), private :: AA, expo, x0, xc
+
+      ! parameters
+      real(kind=dp) :: gamma
+      integer :: kmin, kmax
+
+      ! auxiliar distribution
+      real(kind=dp), private, allocatable :: prob(:)
    contains
-      procedure :: rndPL => rndPL_rndgenPL
-      procedure :: initPL => initPL_rndgenPL
+      procedure :: rndPL => rndPL_rndgenPL ! generates a random number following the power-law distribution
+      procedure :: initPL => initPL_rndgenPL ! initializes the power-law random number generator
    end type
-! / SPECIFIC FOR PL: IF NOT USED, CAN DELETE
 
    public :: rndgenPL
 
 contains
 
-! SPECIFIC FOR PL: IF NOT USED, CAN DELETE
-   ! Adapted from Silvio C. Ferreira code
-   subroutine initPL_rndgenPL(this, k0, kc, gama, iseed)
+   !> Initializes the power-law random number generator
+   subroutine initPL_rndgenPL(this, kmin, kmax, gama, iseed)
       class(rndgenPL) :: this
-      integer, intent(in) :: k0, kc
-      real*8, intent(in) :: gama
+      integer, intent(in) :: kmin, kmax
+      real(kind=dp), intent(in) :: gama
       integer, intent(in), optional :: iseed
-      integer :: j
 
       if (present(iseed)) call this%init(iseed)
 
-      this%rndPL_k0 = k0
-      this%rndPL_kc = kc
-      this%rndPL_gama = gama
+      this%kmin = kmin
+      this%kmax = kmax
+      this%gamma = gama
 
-      if (allocated(this%rndPL_pk)) deallocate (this%rndPL_pk)
-      allocate (this%rndPL_pk(k0:kc))
+      if (allocated(this%prob)) deallocate (this%prob)
+      allocate (this%prob(kmin:kmax))
 
-      this%rndPL_AA = 0d0
-      do j = k0, kc
-         this%rndPL_AA = this%rndPL_AA + (1d0*j)**(-gama)
-         this%rndPL_pk(j) = (1d0*j)**(-gama)
-      end do
-      this%rndPL_AA = 1d0/this%rndPL_AA
-      this%rndPL_pk = this%rndPL_AA*this%rndPL_pk
+      this%AA = 0d0
+      block
+         integer(kind=kind(kmax)) :: j
 
-      this%rndPL_x0 = (1d0*(k0 - 1))**(-gama + 1d0)
-      this%rndPL_xc = (1d0*kc)**(-gama + 1d0)
-      this%rndPL_expo = 1d0/(1d0 - gama)
+         do j = kmin, kmax
+            this%AA = this%AA + (1.0_dp*j)**(-gama)
+            this%prob(j) = (1.0_dp*j)**(-gama)
+         end do
+
+         this%AA = 1.0_dp/this%AA
+         this%prob = this%AA*this%prob
+
+      end block
+
+      this%x0 = (1.0_dp*(kmin - 1))**(-gama + 1.0_dp)
+      this%xc = (1.0_dp*kmax)**(-gama + 1.0_dp)
+      this%expo = 1.0_dp/(1.0_dp - gama)
 
    end subroutine
 
-   function rndPL_rndgenPL(this)
+   !> Generates a random number following the power-law distribution
+   function rndPL_rndgenPL(this) result(rnd_number)
       class(rndgenPL) :: this
-      real*8 :: z, x
-      integer :: j, rndPL_rndgenPL
+      real(kind=dp) :: z, x
+      integer :: j, rnd_number
 
       do
          z = this%rnd()
-         x = (this%rndPL_x0 - z*(this%rndPL_x0 - this%rndPL_xc))**this%rndPL_expo
+         x = (this%x0 - z*(this%x0 - this%xc))**this%expo
          j = ceiling(x)
 
          z = this%rnd()
 
-         if (.not. z*this%rndPL_AA/(x**this%rndPL_gama) >= this%rndPL_pk(j)) exit
+         if (.not. z*this%AA/(x**this%gamma) >= this%prob(j)) exit
 
       end do
 
-      rndPL_rndgenPL = j
+      rnd_number = j
 
    end function
-   ! / SPECIFIC FOR PL: IF NOT USED, CAN DELETE
 end module
