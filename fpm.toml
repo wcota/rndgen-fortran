@@ -1,4 +1,4 @@
-name = "mod_rndgen"
+name = "rndgen-fortran"
 version = "0.3.1"
 license = "GNU General Public License v3.0"
 author = "Wesley Cota"
