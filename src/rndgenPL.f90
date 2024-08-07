@@ -35,6 +35,7 @@ contains
       integer(kind=i16), intent(in) :: kmin, kmax
       real(kind=dp), intent(in) :: gama
       integer, intent(in), optional :: iseed
+      integer(kind=kind(kmax)) :: j
 
       if (present(iseed)) call this%init(iseed)
 
@@ -46,18 +47,14 @@ contains
       allocate (this%prob(kmin:kmax))
 
       this%AA = 0d0
-      block
-         integer(kind=kind(kmax)) :: j
 
-         do j = kmin, kmax
-            this%AA = this%AA + (1.0_dp*j)**(-gama)
-            this%prob(j) = (1.0_dp*j)**(-gama)
-         end do
+      do j = kmin, kmax
+         this%AA = this%AA + (1.0_dp*j)**(-gama)
+         this%prob(j) = (1.0_dp*j)**(-gama)
+      end do
 
-         this%AA = 1.0_dp/this%AA
-         this%prob = this%AA*this%prob
-
-      end block
+      this%AA = 1.0_dp/this%AA
+      this%prob = this%AA*this%prob
 
       this%x0 = (1.0_dp*(kmin - 1))**(-gama + 1.0_dp)
       this%xc = (1.0_dp*kmax)**(-gama + 1.0_dp)
