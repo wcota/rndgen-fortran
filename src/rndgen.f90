@@ -26,22 +26,20 @@
 ! Author    : Wesley Cota
 ! Email     : wesley@wcota.me
 ! Homepage  : http://wcota.me
-! Date      : 25 Feb 2024
-! Version   : 0.3.1
+! Date      : 15 Aug 2024
+! Version   : 0.3.3
 !-----------------------------------------------------------------------------
 
 module rndgen_mod
+   use iso_fortran_env, only : i4 => int32, i8 => int64, sp => real32, dp => real64
    implicit none
    private
 
-   integer, parameter :: dp = selected_real_kind(15) ! 8-byte reals
-   integer, parameter :: i8 = selected_int_kind(8) ! 4-byte integers
-   integer, parameter :: i16 = selected_int_kind(16) ! 8-byte integers
    real(kind=dp), parameter :: am = 4.656612873077392578d-10 ! multiplier 1/2^31
 
    !> Random seeds object
    type :: rndSeed
-      integer(kind=i8), private :: mseed(4)
+      integer(kind=i4), private :: mseed(4)
    contains
       procedure :: saveToFile => saveToFile_rndSeed
       procedure :: readFromFile => readFromFile_rndSeed
@@ -49,14 +47,14 @@ module rndgen_mod
 
    !> Random number generator object with its procedures
    type :: rndgen
-      integer :: o_iseed ! seed used to generate the four new seeds
+      integer(kind=i4) :: o_iseed ! seed used to generate the four new seeds
       type(rndSeed) :: seed
 
    contains
 
-      procedure :: rnd => rnd_rndgen ! generates a random number in the range [0, 1)
-      procedure :: int => int_rndgen ! generates a random integer number in the range [i1, i2]
-      procedure :: real => real_rndgen ! generates a random real number in the range [r1, r2)
+      procedure :: rnd => rnd_rndgen_dp  ! generates a random number in the range [0, 1)
+      procedure :: int => int_rndgen_i8 ! generates a random integer number in the range [i1, i2]
+      procedure :: real => real_rndgen_dp ! generates a random real number in the range [r1, r2)
 
       procedure :: init => init_rndgen
       procedure :: reset => reset_rndgen
@@ -70,7 +68,7 @@ module rndgen_mod
 
 contains
    !> Generates a random number in the range [0, 1)
-   function rnd_rndgen(this) result(rnd_number) ! KISS
+   function rnd_rndgen_dp(this) result(rnd_number) ! KISS
       ! Adapted from <http://web.mst.edu/~vojtat/class_5403/kiss05/rkiss05.f90> by Thomas Vojta
 
       class(rndgen) :: this
@@ -88,17 +86,17 @@ contains
       rnd_number = kiss*am ! returns in range [0, 1)
    end function
 
-   !> Generates a random integer number in the range [i1, i2]
-   function int_rndgen(this, i1, i2) result(rnd_number)
+   !> Generates a random integer number in the range [i1, i2], int64
+   function int_rndgen_i8(this, i1, i2) result(rnd_number)
       class(rndgen) :: this
-      integer(kind=i16), intent(in) :: i1, i2
-      integer(kind=i16) :: rnd_number
+      integer(kind=i8), intent(in) :: i1, i2
+      integer(kind=i8) :: rnd_number
 
       rnd_number = min(int(this%rnd()*(i2 + 1 - i1)) + i1, i2) ! returns in range [i1, i2]
    end function
 
-   !> Generates a random real number in the range [r1, r2)
-   function real_rndgen(this, r1, r2) result(rnd_number)
+   !> Generates a random real number in the range [r1, r2), double
+   function real_rndgen_dp(this, r1, r2) result(rnd_number)
       class(rndgen) :: this
       real(kind=dp), intent(in) :: r1, r2
       real(kind=dp) :: rnd_number
@@ -112,8 +110,8 @@ contains
 
       class(rndgen) :: this
 
-      integer(kind=i8) :: idum, ia, im, iq, ir, iseed, iseed_var
-      integer(kind=i8) :: k, c1
+      integer(kind=i4) :: idum, ia, im, iq, ir, iseed, iseed_var
+      integer(kind=i4) :: k, c1
       real(kind=dp) :: rdum
 
       parameter(ia=16807, im=2147483647, iq=127773, ir=2836)

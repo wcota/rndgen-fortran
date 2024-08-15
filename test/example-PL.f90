@@ -1,9 +1,7 @@
 program example
+   use iso_fortran_env, only : i4 => int32, i8 => int64, sp => real32, dp => real64
    use rndgenPL_mod
    implicit none
-
-   integer, parameter :: dp = selected_real_kind(15) ! 8-byte reals
-   integer, parameter :: i16 = selected_int_kind(16) ! 8-byte integers
    
    integer :: i, j, k
    integer :: seed = 294727492
@@ -14,7 +12,7 @@ program example
    type(rndgenPL) :: generatorPL
 
    ! Initialize it with the seed with x0=3, xc = sqrt(N), \gamma = 2.1
-   call generatorPL%initPL(3_i16, int(N**(1d0/2d0), i16), 2.1_dp, seed) ! k0, kc, gam, iseed
+   call generatorPL%initPL(3_i8, int(N**(1d0/2d0), i8), 2.1_dp, seed) ! k0, kc, gam, iseed
 
    ! Histogram
    allocate (pok(generatorPL%kmin:generatorPL%kmax))

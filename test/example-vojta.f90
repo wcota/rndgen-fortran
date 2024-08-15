@@ -1,11 +1,9 @@
 program example
+   use iso_fortran_env, only : i4 => int32, i8 => int64, sp => real32, dp => real64
    use rndgen_mod
    implicit none
 
    ! Adapted from <https://web.mst.edu/vojtat/class_5403/kiss05/rtest.f90>
-
-   integer, parameter :: dp = selected_real_kind(15) ! 8-byte reals
-   integer, parameter :: i16 = selected_int_kind(16) ! 8-byte integer
 
    ! Declare the generator
    type(rndgen) :: generator

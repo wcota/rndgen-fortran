@@ -1,9 +1,7 @@
 program example
+   use iso_fortran_env, only : i4 => int32, i8 => int64, sp => real32, dp => real64
    use rndgen_mod
    implicit none
-
-   integer, parameter :: dp = selected_real_kind(15) ! 8-byte reals
-   integer, parameter :: i16 = selected_int_kind(16) ! 8-byte integer
 
    integer :: i
    integer :: seed = 294727492
@@ -21,7 +19,7 @@ program example
 
    write (*, *) "10 random integers between 5 and 2587:"
    do i = 1, 10
-      write (*, *) generator%int(5_i16, 2587_i16)
+      write (*, *) generator%int(5_i8, 2587_i8)
    end do
 
    write (*, *) "10 random real between -5.2 and 100.9:"
@@ -41,7 +39,7 @@ program example
 
    write (*, *) "10 random integers between 5 and 2587:"
    do i = 1, 10
-    write (*, *) generator%int(5_i16, 2587_i16)
+    write (*, *) generator%int(5_i8, 2587_i8)
    end do
 
    write (*, *) "10 random real between -5.2 and 100.9:"
