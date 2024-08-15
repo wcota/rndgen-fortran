@@ -54,7 +54,9 @@ module rndgen_mod
 
       procedure :: rnd => rnd_rndgen_dp  ! generates a random number in the range [0, 1)
       procedure :: int => int_rndgen_i8 ! generates a random integer number in the range [i1, i2]
+      procedure :: int_i4 => int_rndgen_i4
       procedure :: real => real_rndgen_dp ! generates a random real number in the range [r1, r2)
+      procedure :: real_sp => real_rndgen_sp ! generates a random real number in the range [r1, r2)
 
       procedure :: init => init_rndgen
       procedure :: reset => reset_rndgen
@@ -95,6 +97,15 @@ contains
       rnd_number = min(int(this%rnd()*(i2 + 1 - i1)) + i1, i2) ! returns in range [i1, i2]
    end function
 
+   !> Generates a random integer number in the range [i1, i2], int32
+   function int_rndgen_i4(this, i1, i2) result(rnd_number)
+      class(rndgen) :: this
+      integer(kind=i4), intent(in) :: i1, i2
+      integer(kind=i4) :: rnd_number
+
+      rnd_number = int(this%int(int(i1,kind=i8), int(i2,kind=i8)), kind=i4)
+   end function
+
    !> Generates a random real number in the range [r1, r2), double
    function real_rndgen_dp(this, r1, r2) result(rnd_number)
       class(rndgen) :: this
@@ -102,6 +113,15 @@ contains
       real(kind=dp) :: rnd_number
 
       rnd_number = r1 + (r2 - r1)*this%rnd() ! returns in range [r1, r2)
+   end function
+
+   !> Generates a random real number in the range [r1, r2), single
+   function real_rndgen_sp(this, r1, r2) result(rnd_number)
+      class(rndgen) :: this
+      real(kind=sp), intent(in) :: r1, r2
+      real(kind=sp) :: rnd_number
+
+      rnd_number = real(this%real(real(r1, kind=dp), real(r2, kind=dp)), kind=sp) ! returns in range [r1, r2)
    end function
 
    !> Initializes the random number generator
