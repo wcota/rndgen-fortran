@@ -112,15 +112,15 @@ contains
 
       class(rndgen) :: this
 
-      integer(kind=i8) :: idum, ia, im, iq, ir, iseed
+      integer(kind=i8) :: idum, ia, im, iq, ir, iseed, iseed_var
       integer(kind=i8) :: k, c1
       real(kind=dp) :: rdum
 
       parameter(ia=16807, im=2147483647, iq=127773, ir=2836)
 
-      iseed = abs(iseed) ! must be positive!
+      iseed_var = abs(iseed) ! must be positive!
 
-      this%o_iseed = iseed
+      this%o_iseed = iseed_var
 
       !!! Test integer representation !!!
       c1 = -8
@@ -128,7 +128,7 @@ contains
       !     print *,c1
       if (c1 /= 536870911) stop 'Nonstandard integer representation. Stopped.'
 
-      idum = iseed
+      idum = iseed_var
       idum = abs(1099087573*idum)               ! 32-bit LCG to shuffle seeds
       if (idum == 0) idum = 1
       if (idum >= IM) idum = IM - 1
