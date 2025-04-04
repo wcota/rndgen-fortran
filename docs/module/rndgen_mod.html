@@ -12,14 +12,29 @@
 
     <title>rndgen_mod &ndash; RNDGEN module</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link href="../css/pygments.css" rel="stylesheet">
-    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
     <link href="../css/local.css" rel="stylesheet">
-      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
-
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link href="../css/pygments.css" rel="stylesheet">
     <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
@@ -73,9 +88,8 @@
             <li class="list-inline-item" id="meta-license"><i class="fa fa-legal"></i> <a rel="license" href="http://www.gnu.org/licenses/old-licenses/fdl-1.2.en.html">GNU Free Documentation License</a></li>
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
-              <a data-bs-toggle="tooltip"
-                 data-bs-placement="bottom" data-html="true"
-                 title="69.6% of total for modules and submodules.">133 statements</a>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title="72.9% of total for modules and submodules.">183 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -95,9 +109,11 @@
     </div>
   </div>
   <script>
-    $(function () {
-    $('[data-bs-toggle="tooltip"]').tooltip()
-    })
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
   </script>
 
   </div>
@@ -114,9 +130,6 @@
       </a>
       <div id="vars-0" class="collapse">
         <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../module/rndgen_mod.html#variable-dp">dp</a>
-            <a class="list-group-item" href="../module/rndgen_mod.html#variable-i8">i8</a>
-            <a class="list-group-item" href="../module/rndgen_mod.html#variable-i16">i16</a>
             <a class="list-group-item" href="../module/rndgen_mod.html#variable-am">am</a>
         </div>
       </div>
@@ -150,9 +163,15 @@
       </a>
       <div id="funcs-0" class="collapse">
         <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../module/rndgen_mod.html#proc-rnd_rndgen">rnd_rndgen</a>
-            <a class="list-group-item" href="../module/rndgen_mod.html#proc-int_rndgen">int_rndgen</a>
-            <a class="list-group-item" href="../module/rndgen_mod.html#proc-real_rndgen">real_rndgen</a>
+            <a class="list-group-item" href="../module/rndgen_mod.html#proc-rnd_rndgen_dp">rnd_rndgen_dp</a>
+            <a class="list-group-item" href="../module/rndgen_mod.html#proc-int_rndgen_i8">int_rndgen_i8</a>
+            <a class="list-group-item" href="../module/rndgen_mod.html#proc-int_rndgen_i4">int_rndgen_i4</a>
+            <a class="list-group-item" href="../module/rndgen_mod.html#proc-real_rndgen_dp">real_rndgen_dp</a>
+            <a class="list-group-item" href="../module/rndgen_mod.html#proc-real_rndgen_sp">real_rndgen_sp</a>
+            <a class="list-group-item" href="../module/rndgen_mod.html#proc-rnd_array_rnd">rnd_array_rnd</a>
+            <a class="list-group-item" href="../module/rndgen_mod.html#proc-rnd_array_real">rnd_array_real</a>
+            <a class="list-group-item" href="../module/rndgen_mod.html#proc-rnd_array_int_i4">rnd_array_int_i4</a>
+            <a class="list-group-item" href="../module/rndgen_mod.html#proc-rnd_array_int_i8">rnd_array_int_i8</a>
         </div>
       </div>
     </div>
@@ -189,7 +208,140 @@
 
     <div class="col-md-9" id='text'>
       
-<br>      
+<br>          <div class="card mb-4">
+      <h3 class="card-header card-title bg-light">Uses</h3>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <ul class="list-inline">
+                  <li class="list-inline-item"><a href='rndgen_kinds_mod.html'>rndgen_kinds_mod</a></li>
+              </ul>
+            </li>
+            <li class="list-group-item">
+              <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 12.2.1 (0)
+ -->
+<!-- Title: module~~rndgen_mod~~UsesGraph Pages: 1 -->
+<svg id="modulerndgen_modUsesGraph" width="341pt" height="32pt"
+ viewBox="0.00 0.00 341.06 31.52" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~rndgen_mod~~UsesGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 27.52)">
+<title>module~~rndgen_mod~~UsesGraph</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-27.52 337.06,-27.52 337.06,4 -4,4"/>
+<!-- module~rndgen_mod -->
+<g id="module~~rndgen_mod~~UsesGraph_node1" class="node">
+<title>module~rndgen_mod</title>
+<polygon fill="none" stroke="black" points="333.06,-23.52 260.79,-23.52 260.79,0 333.06,0 333.06,-23.52"/>
+<text text-anchor="middle" x="296.92" y="-7.78" font-family="Helvetica,sans-Serif" font-size="10.50">rndgen_mod</text>
+</g>
+<!-- module~rndgen_kinds_mod -->
+<g id="module~~rndgen_mod~~UsesGraph_node2" class="node">
+<title>module~rndgen_kinds_mod</title>
+<g id="a_module~~rndgen_mod~~UsesGraph_node2"><a xlink:href="../module/rndgen_kinds_mod.html" xlink:title="rndgen_kinds_mod">
+<polygon fill="#337ab7" stroke="#337ab7" points="224.79,-23.52 121.77,-23.52 121.77,0 224.79,0 224.79,-23.52"/>
+<text text-anchor="middle" x="173.28" y="-7.78" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">rndgen_kinds_mod</text>
+</a>
+</g>
+</g>
+<!-- module~rndgen_mod&#45;&gt;module~rndgen_kinds_mod -->
+<g id="module~~rndgen_mod~~UsesGraph_edge1" class="edge">
+<title>module~rndgen_mod&#45;&gt;module~rndgen_kinds_mod</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M260.41,-11.76C252.8,-11.76 244.53,-11.76 236.24,-11.76"/>
+<polygon fill="#000000" stroke="#000000" points="236.49,-8.26 226.49,-11.76 236.49,-15.26 236.49,-8.26"/>
+</g>
+<!-- iso_fortran_env -->
+<g id="module~~rndgen_mod~~UsesGraph_node3" class="node">
+<title>iso_fortran_env</title>
+<g id="a_module~~rndgen_mod~~UsesGraph_node3"><a xlink:href="http://fortranwiki.org/fortran/show/iso_fortran_env" xlink:title="iso_fortran_env">
+<polygon fill="#337ab7" stroke="#337ab7" points="85.77,-23.52 0,-23.52 0,0 85.77,0 85.77,-23.52"/>
+<text text-anchor="middle" x="42.88" y="-7.78" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">iso_fortran_env</text>
+</a>
+</g>
+</g>
+<!-- module~rndgen_kinds_mod&#45;&gt;iso_fortran_env -->
+<g id="module~~rndgen_mod~~UsesGraph_edge2" class="edge">
+<title>module~rndgen_kinds_mod&#45;&gt;iso_fortran_env</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M121.53,-11.76C113.62,-11.76 105.43,-11.76 97.45,-11.76"/>
+<polygon fill="#000000" stroke="#000000" points="97.51,-8.26 87.51,-11.76 97.51,-15.26 97.51,-8.26"/>
+</g>
+</g>
+</svg>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#UsesGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="UsesGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 12.2.1 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="485pt" height="32pt"
+ viewBox="0.00 0.00 485.13 31.52" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 27.52)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-27.52 481.13,-27.52 481.13,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-23.52 0,-23.52 0,0 54,0 54,-23.52"/>
+<text text-anchor="middle" x="27" y="-7.78" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="137.76,-23.52 72.24,-23.52 72.24,0 137.76,0 137.76,-23.52"/>
+<text text-anchor="middle" x="105" y="-7.78" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="218.63,-23.52 155.37,-23.52 155.37,0 218.63,0 218.63,-23.52"/>
+<text text-anchor="middle" x="187" y="-7.78" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="291,-23.52 237,-23.52 237,0 291,0 291,-23.52"/>
+<text text-anchor="middle" x="264" y="-7.78" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="363,-23.52 309,-23.52 309,0 363,0 363,-23.52"/>
+<text text-anchor="middle" x="336" y="-7.78" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="477.13,-23.52 380.87,-23.52 380.87,0 477.13,0 477.13,-23.52"/>
+<text text-anchor="middle" x="429" y="-7.78" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a submodule to the (sub)module which it is
+descended from. Dashed arrows point from a module or program unit to 
+modules which it uses.
+</p>
+ </div>
+            </div>
+          </div>
+        </div>
+            </li>
+        </ul>
+      </div>
+    </div>
+
           <div class="card">
       <h3 class="card-header card-title bg-light">Used by</h3>
       <div class="card-body">
@@ -198,7 +350,7 @@
               <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 10.0.1 (0)
+<!-- Generated by graphviz version 12.2.1 (0)
  -->
 <!-- Title: module~~rndgen_mod~~UsedByGraph Pages: 1 -->
 <svg id="modulerndgen_modUsedByGraph" width="201pt" height="32pt"
@@ -244,7 +396,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 10.0.1 (0)
+<!-- Generated by graphviz version 12.2.1 (0)
  -->
 <!-- Title: Graph Key Pages: 1 -->
 <svg width="485pt" height="32pt"
@@ -321,57 +473,6 @@ modules which it uses.
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-dp"></span>
-              integer,
-            </td>
-              <td>private,</td>
-            <td>
-parameter               
-            </td>
-            <td>::</td>
-            <td><strong>dp</strong></td>
-<td> =</td>
-                <td>selected_real_kind(15)</td>
-            <td>
-                
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-i8"></span>
-              integer,
-            </td>
-              <td>private,</td>
-            <td>
-parameter               
-            </td>
-            <td>::</td>
-            <td><strong>i8</strong></td>
-<td> =</td>
-                <td>selected_int_kind(8)</td>
-            <td>
-                
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-i16"></span>
-              integer,
-            </td>
-              <td>private,</td>
-            <td>
-parameter               
-            </td>
-            <td>::</td>
-            <td><strong>i16</strong></td>
-<td> =</td>
-                <td>selected_int_kind(16)</td>
-            <td>
-                
-            </td>
-        </tr>
-        <tr>
-            <td>
               <span class="anchor" id="variable-am"></span>
               real(kind=dp),
             </td>
@@ -424,7 +525,7 @@ parameter
         <tr>
             <td>
               <span class="anchor" id="variable-mseed"></span>
-              integer(kind=i8),
+              integer(kind=i4),
             </td>
               <td>private</td>
             <td>
@@ -449,13 +550,13 @@ parameter
           <tbody>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='../type/rndseed.html#boundprocedure-savetofile'>saveToFile</a></strong> => <a href='/data/repos/wcota.me/mod_rndgen/doc/proc/savetofile_rndseed.html'>saveToFile_rndSeed</a></td>
-                <td></td>
+  <strong><a href='../type/rndseed.html#boundprocedure-savetofile'>saveToFile</a></strong> => <a href='/data/repos/wcota.me/mod_rndgen/docs/proc/savetofile_rndseed.html'>saveToFile_rndSeed</a></td>
+                  <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='../type/rndseed.html#boundprocedure-readfromfile'>readFromFile</a></strong> => <a href='/data/repos/wcota.me/mod_rndgen/doc/proc/readfromfile_rndseed.html'>readFromFile_rndSeed</a></td>
-                <td></td>
+  <strong><a href='../type/rndseed.html#boundprocedure-readfromfile'>readFromFile</a></strong> => <a href='/data/repos/wcota.me/mod_rndgen/docs/proc/readfromfile_rndseed.html'>readFromFile_rndSeed</a></td>
+                  <td></td>
               </tr>
           </tbody>
         </table>
@@ -488,7 +589,7 @@ parameter
         <tr>
             <td>
               <span class="anchor" id="variable-o_iseed"></span>
-              integer,
+              integer(kind=i4),
             </td>
               <td>public</td>
             <td>
@@ -530,38 +631,83 @@ parameter
           <tbody>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='../type/rndgen.html#boundprocedure-rnd'>rnd</a></strong> => <a href='/data/repos/wcota.me/mod_rndgen/doc/proc/rnd_rndgen.html'>rnd_rndgen</a></td>
-                <td></td>
+  <strong><a href='../type/rndgen.html#boundprocedure-rnd'>rnd</a></strong> => <a href='/data/repos/wcota.me/mod_rndgen/docs/proc/rnd_rndgen_dp.html'>rnd_rndgen_dp</a></td>
+                  <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='../type/rndgen.html#boundprocedure-int'>int</a></strong> => <a href='/data/repos/wcota.me/mod_rndgen/doc/proc/int_rndgen.html'>int_rndgen</a></td>
-                <td></td>
+  <strong><a href='../type/rndgen.html#boundprocedure-int'>int</a></strong> => <a href='/data/repos/wcota.me/mod_rndgen/docs/proc/int_rndgen_i4.html'>int_rndgen_i4</a></td>
+                  <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='../type/rndgen.html#boundprocedure-real'>real</a></strong> => <a href='/data/repos/wcota.me/mod_rndgen/doc/proc/real_rndgen.html'>real_rndgen</a></td>
-                <td></td>
+  <strong><a href='../type/rndgen.html#boundprocedure-int_i4'>int_i4</a></strong> => <a href='/data/repos/wcota.me/mod_rndgen/docs/proc/int_rndgen_i4.html'>int_rndgen_i4</a></td>
+                  <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='../type/rndgen.html#boundprocedure-init'>init</a></strong> => <a href='/data/repos/wcota.me/mod_rndgen/doc/proc/init_rndgen.html'>init_rndgen</a></td>
-                <td></td>
+  <strong><a href='../type/rndgen.html#boundprocedure-int_i8'>int_i8</a></strong> => <a href='/data/repos/wcota.me/mod_rndgen/docs/proc/int_rndgen_i8.html'>int_rndgen_i8</a></td>
+                  <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='../type/rndgen.html#boundprocedure-reset'>reset</a></strong> => <a href='/data/repos/wcota.me/mod_rndgen/doc/proc/reset_rndgen.html'>reset_rndgen</a></td>
-                <td></td>
+  <strong><a href='../type/rndgen.html#boundprocedure-real'>real</a></strong> => <a href='/data/repos/wcota.me/mod_rndgen/docs/proc/real_rndgen_dp.html'>real_rndgen_dp</a></td>
+                  <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='../type/rndgen.html#boundprocedure-save_seed'>save_seed</a></strong> => <a href='/data/repos/wcota.me/mod_rndgen/doc/proc/save_seed_rndgen.html'>save_seed_rndgen</a></td>
-                <td></td>
+  <strong><a href='../type/rndgen.html#boundprocedure-real_sp'>real_sp</a></strong> => <a href='/data/repos/wcota.me/mod_rndgen/docs/proc/real_rndgen_sp.html'>real_rndgen_sp</a></td>
+                  <td></td>
               </tr>
               <tr>
                 <td>  procedure, public ::
-  <strong><a href='../type/rndgen.html#boundprocedure-read_seed'>read_seed</a></strong> => <a href='/data/repos/wcota.me/mod_rndgen/doc/proc/read_seed_rndgen.html'>read_seed_rndgen</a></td>
-                <td></td>
+  <strong><a href='../type/rndgen.html#boundprocedure-init'>init</a></strong> => <a href='/data/repos/wcota.me/mod_rndgen/docs/proc/init_rndgen.html'>init_rndgen</a></td>
+                  <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='../type/rndgen.html#boundprocedure-reset'>reset</a></strong> => <a href='/data/repos/wcota.me/mod_rndgen/docs/proc/reset_rndgen.html'>reset_rndgen</a></td>
+                  <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='../type/rndgen.html#boundprocedure-save_seed'>save_seed</a></strong> => <a href='/data/repos/wcota.me/mod_rndgen/docs/proc/save_seed_rndgen.html'>save_seed_rndgen</a></td>
+                  <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='../type/rndgen.html#boundprocedure-read_seed'>read_seed</a></strong> => <a href='/data/repos/wcota.me/mod_rndgen/docs/proc/read_seed_rndgen.html'>read_seed_rndgen</a></td>
+                  <td></td>
+              </tr>
+              <tr>
+                <td>  generic, public ::
+  <strong><a href='../type/rndgen.html#boundprocedure-rnd_array'>rnd_array</a></strong> => <a href='/data/repos/wcota.me/mod_rndgen/docs/type/rndgen.html#boundprocedure-rnd_array_rnd'>rnd_array_rnd</a>, <a href='/data/repos/wcota.me/mod_rndgen/docs/type/rndgen.html#boundprocedure-rnd_array_real'>rnd_array_real</a>, <a href='/data/repos/wcota.me/mod_rndgen/docs/type/rndgen.html#boundprocedure-rnd_array_int_i4'>rnd_array_int_i4</a></td>
+                  <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='../type/rndgen.html#boundprocedure-rnd_array_i4'>rnd_array_i4</a></strong> => <a href='/data/repos/wcota.me/mod_rndgen/docs/proc/rnd_array_int_i4.html'>rnd_array_int_i4</a></td>
+                  <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='../type/rndgen.html#boundprocedure-rnd_array_i8'>rnd_array_i8</a></strong> => <a href='/data/repos/wcota.me/mod_rndgen/docs/proc/rnd_array_int_i8.html'>rnd_array_int_i8</a></td>
+                  <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, private ::
+  <strong><a href='../type/rndgen.html#boundprocedure-rnd_array_rnd'>rnd_array_rnd</a></strong></td>
+                  <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, private ::
+  <strong><a href='../type/rndgen.html#boundprocedure-rnd_array_real'>rnd_array_real</a></strong></td>
+                  <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, private ::
+  <strong><a href='../type/rndgen.html#boundprocedure-rnd_array_int_i4'>rnd_array_int_i4</a></strong></td>
+                  <td></td>
               </tr>
           </tbody>
         </table>
@@ -574,7 +720,7 @@ parameter
         <section>
           <h2>Functions</h2>
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-rnd_rndgen"></span> <h3>private  function <a href='../proc/rnd_rndgen.html'>rnd_rndgen</a>(this) result(rnd_number)  
+    <div class="card-header codesum"><span class="anchor" id="proc-rnd_rndgen_dp"></span> <h3>private  function <a href='../proc/rnd_rndgen_dp.html'>rnd_rndgen_dp</a>(this) result(rnd_number)  
 </h3></div>
     <div class="card-body">
           
@@ -619,11 +765,11 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-int_rndgen"></span> <h3>private  function <a href='../proc/int_rndgen.html'>int_rndgen</a>(this, i1, i2) result(rnd_number)  
+    <div class="card-header codesum"><span class="anchor" id="proc-int_rndgen_i8"></span> <h3>private  function <a href='../proc/int_rndgen_i8.html'>int_rndgen_i8</a>(this, i1, i2) result(rnd_number)  
 </h3></div>
     <div class="card-body">
           
-  <p>Generates a random integer number in the range [i1, i2]</p>
+  <p>Generates a random integer number in the range [i1, i2], int64</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -654,7 +800,7 @@ parameter
         <tr>
             <td>
               <span class="anchor" id="variable-i1"></span>
-              integer(kind=i16),
+              integer(kind=i8),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -669,7 +815,7 @@ parameter
         <tr>
             <td>
               <span class="anchor" id="variable-i2"></span>
-              integer(kind=i16),
+              integer(kind=i8),
             </td>
 <td>intent(in)</td>
               <td></td>            <td>
@@ -686,7 +832,7 @@ parameter
 
     <h4>
     Return Value
-    <small>integer(kind=i16)</small>
+    <small>integer(kind=i8)</small>
     </h4>
     
 
@@ -694,11 +840,11 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-real_rndgen"></span> <h3>private  function <a href='../proc/real_rndgen.html'>real_rndgen</a>(this, r1, r2) result(rnd_number)  
+    <div class="card-header codesum"><span class="anchor" id="proc-int_rndgen_i4"></span> <h3>private  function <a href='../proc/int_rndgen_i4.html'>int_rndgen_i4</a>(this, i1, i2) result(rnd_number)  
 </h3></div>
     <div class="card-body">
           
-  <p>Generates a random real number in the range [r1, r2)</p>
+  <p>Generates a random integer number in the range [i1, i2], int32</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -714,6 +860,81 @@ parameter
         <tr>
             <td>
               <span class="anchor" id="variable-this~3"></span>
+              class(<a href='../type/rndgen.html'>rndgen</a>)
+            </td>
+<td></td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-i1~2"></span>
+              integer(kind=i4),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>i1</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-i2~2"></span>
+              integer(kind=i4),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>i2</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>integer(kind=i4)</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-real_rndgen_dp"></span> <h3>private  function <a href='../proc/real_rndgen_dp.html'>real_rndgen_dp</a>(this, r1, r2) result(rnd_number)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Generates a random real number in the range [r1, r2), double</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-this~4"></span>
               class(<a href='../type/rndgen.html'>rndgen</a>)
             </td>
 <td></td>
@@ -768,6 +989,411 @@ parameter
     </div>
   </div>
 
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-real_rndgen_sp"></span> <h3>private  function <a href='../proc/real_rndgen_sp.html'>real_rndgen_sp</a>(this, r1, r2) result(rnd_number)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Generates a random real number in the range [r1, r2), single</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-this~5"></span>
+              class(<a href='../type/rndgen.html'>rndgen</a>)
+            </td>
+<td></td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-r1~2"></span>
+              real(kind=sp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>r1</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-r2~2"></span>
+              real(kind=sp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>r2</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=sp)</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-rnd_array_rnd"></span> <h3>private  function <a href='../proc/rnd_array_rnd.html'>rnd_array_rnd</a>(gen, n) result(arr)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Generates a random array of real numbers in the range [0, 1)</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-gen"></span>
+              class(<a href='../type/rndgen.html'>rndgen</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>gen</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n"></span>
+              integer(kind=i4),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=dp), allocatable, (:)</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-rnd_array_real"></span> <h3>private  function <a href='../proc/rnd_array_real.html'>rnd_array_real</a>(gen, n, r1, r2) result(arr)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Generates a random array of real numbers in the range [r1, r2)</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-gen~2"></span>
+              class(<a href='../type/rndgen.html'>rndgen</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>gen</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n~2"></span>
+              integer(kind=i4),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-r1~3"></span>
+              real(kind=dp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>r1</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-r2~3"></span>
+              real(kind=dp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>r2</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=dp), allocatable, (:)</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-rnd_array_int_i4"></span> <h3>private  function <a href='../proc/rnd_array_int_i4.html'>rnd_array_int_i4</a>(gen, n, i1, i2) result(arr)  
+</h3></div>
+    <div class="card-body">
+          
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-gen~3"></span>
+              class(<a href='../type/rndgen.html'>rndgen</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>gen</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n~3"></span>
+              integer(kind=i4),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-i1~3"></span>
+              integer(kind=i4),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>i1</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-i2~3"></span>
+              integer(kind=i4),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>i2</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>integer(kind=i4), allocatable, (:)</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-rnd_array_int_i8"></span> <h3>private  function <a href='../proc/rnd_array_int_i8.html'>rnd_array_int_i8</a>(gen, n, i1, i2) result(arr)  
+</h3></div>
+    <div class="card-body">
+          
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-gen~4"></span>
+              class(<a href='../type/rndgen.html'>rndgen</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>gen</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n~4"></span>
+              integer(kind=i4),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-i1~4"></span>
+              integer(kind=i8),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>i1</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-i2~4"></span>
+              integer(kind=i8),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>i2</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>integer(kind=i8), allocatable, (:)</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
         </section>
         <br>
 
@@ -793,7 +1419,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-this~4"></span>
+              <span class="anchor" id="variable-this~6"></span>
               class(<a href='../type/rndgen.html'>rndgen</a>)
             </td>
 <td></td>
@@ -809,7 +1435,7 @@ parameter
         <tr>
             <td>
               <span class="anchor" id="variable-iseed"></span>
-              integer(kind=i8)
+              integer(kind=i4)
             </td>
 <td></td>
               <td></td>            <td>
@@ -848,7 +1474,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-this~5"></span>
+              <span class="anchor" id="variable-this~7"></span>
               class(<a href='../type/rndgen.html'>rndgen</a>)
             </td>
 <td></td>
@@ -888,7 +1514,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-this~6"></span>
+              <span class="anchor" id="variable-this~8"></span>
               class(<a href='../type/rndgen.html'>rndgen</a>)
             </td>
 <td></td>
@@ -958,7 +1584,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-this~7"></span>
+              <span class="anchor" id="variable-this~9"></span>
               class(<a href='../type/rndgen.html'>rndgen</a>)
             </td>
 <td></td>
@@ -1028,7 +1654,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-this~8"></span>
+              <span class="anchor" id="variable-this~10"></span>
               class(<a href='../type/rndseed.html'>rndSeed</a>)
             </td>
 <td></td>
@@ -1083,7 +1709,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-this~9"></span>
+              <span class="anchor" id="variable-this~11"></span>
               class(<a href='../type/rndseed.html'>rndSeed</a>)
             </td>
 <td></td>
@@ -1131,7 +1757,10 @@ parameter
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>RNDGEN module was developed by Wesley Cota <https://wcota.me/><br>&copy; 2024 <a rel="license" href="http://www.gnu.org/licenses/old-licenses/fdl-1.2.en.html">GNU Free Documentation License</a>
+          <div class="col">
+            <p>
+              RNDGEN module
+ was developed by Wesley Cota <https://wcota.me/><br>              &copy; 2025 <a rel="license" href="http://www.gnu.org/licenses/old-licenses/fdl-1.2.en.html">GNU Free Documentation License</a>
 </p>
           </div>
           <div class="col">
@@ -1144,27 +1773,5 @@ parameter
         <br>
       </div> <!-- /container -->
     </footer>
-
-    <!-- Bootstrap core JavaScript -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
-
-    <!-- MathJax JavaScript
-             ================================================== -->
-             <!-- Placed at the end of the document so the pages load faster -->
-        <script type="text/x-mathjax-config">
-          MathJax.Hub.Config({
-          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
-          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
-          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
-          });
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-          <script src="../tipuesearch/tipuesearch_content.js"></script>
-          <script src="../tipuesearch/tipuesearch_set.js"></script>
-          <script src="../tipuesearch/tipuesearch.js"></script>
-
   </body>
 </html>
