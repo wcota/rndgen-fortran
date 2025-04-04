@@ -68,6 +68,13 @@ module rndgen_mod
       procedure :: save_seed => save_seed_rndgen
       procedure :: read_seed => read_seed_rndgen
 
+      generic :: rnd_array => rnd_array_rnd, rnd_array_real, rnd_array_int_i4
+      procedure :: rnd_array_i4 => rnd_array_int_i4
+      procedure :: rnd_array_i8 => rnd_array_int_i8
+      procedure, private :: rnd_array_rnd
+      procedure, private :: rnd_array_real
+      procedure, private :: rnd_array_int_i4
+
    end type
 
    public :: rndgen, rndSeed
@@ -242,5 +249,50 @@ contains
       read (und, *) (this%mseed(i), i=1, 4)
 
    end subroutine
+
+   !> Generates a random array of real numbers in the range [0, 1)
+   function rnd_array_rnd(gen, n) result(arr)
+      class(rndgen), intent(in) :: gen
+      integer(kind=i4), intent(in) :: n
+      integer(kind=i4) :: i
+      real(kind=dp), allocatable :: arr(:)
+
+      arr = [(gen%rnd(), i = 1, n)]
+
+  end function rnd_array_rnd
+
+  !> Generates a random array of real numbers in the range [r1, r2)
+  function rnd_array_real(gen, n, r1, r2) result(arr)
+     class(rndgen), intent(in) :: gen
+     integer(kind=i4), intent(in) :: n
+     real(kind=dp), intent(in) :: r1, r2
+     integer(kind=i4) :: i
+     real(kind=dp), allocatable :: arr(:)
+
+     arr = [(gen%real(r1,r2), i = 1, n)]
+
+ end function rnd_array_real
+
+ function rnd_array_int_i4(gen, n, i1, i2) result(arr)
+     class(rndgen), intent(in) :: gen
+     integer(kind=i4), intent(in) :: n
+     integer(kind=i4), intent(in) :: i1, i2
+     integer(kind=i4) :: i
+     integer(kind=i4), allocatable :: arr(:)
+
+     arr = [(gen%int_i4(i1, i2), i = 1, n)]
+
+ end function rnd_array_int_i4
+
+ function rnd_array_int_i8(gen, n, i1, i2) result(arr)
+     class(rndgen), intent(in) :: gen
+     integer(kind=i4), intent(in) :: n
+     integer(kind=i8), intent(in) :: i1, i2
+     integer(kind=i4) :: i
+     integer(kind=i8), allocatable :: arr(:)
+
+     arr = [(gen%int_i8(i1, i2), i = 1, n)]
+
+ end function rnd_array_int_i8
 
 end module
