@@ -27,7 +27,7 @@
 ! Email     : wesley@wcota.me
 ! Homepage  : http://wcota.me
 ! Date      : 04 Apr 2025
-! Version   : 0.4.0
+! Version   : 0.4.1
 !-----------------------------------------------------------------------------
 
 module rndgen_mod
