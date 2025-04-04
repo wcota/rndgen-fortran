@@ -1,18 +1,20 @@
 program example
-   use iso_fortran_env, only : i4 => int32, i8 => int64, sp => real32, dp => real64
+   use rndgen_kinds_mod
    use rndgenPL_mod
    implicit none
    
-   integer :: i, j, k
-   integer :: seed = 294727492
-   integer :: N = 1e7
-   integer, allocatable :: pok(:)
-   integer :: samples = 4
-   real*8 :: sumc
+   integer(kind=i4) :: i, j, k
+   integer(kind=i4) :: seed
+   integer(kind=i4) :: N = 1e7
+   integer(kind=i4), allocatable :: pok(:)
+   integer(kind=i4) :: samples = 4
+   real(kind=dp) :: sumc
    type(rndgenPL) :: generatorPL
 
+   seed = 294727492
+
    ! Initialize it with the seed with x0=3, xc = sqrt(N), \gamma = 2.1
-   call generatorPL%initPL(3_i8, int(N**(1d0/2d0), i8), 2.1_dp, seed) ! k0, kc, gam, iseed
+   call generatorPL%initPL(3, int(N**(1d0/2d0),kind=i4), 2.1_dp, seed) ! k0, kc, gam, iseed
 
    ! Histogram
    allocate (pok(generatorPL%kmin:generatorPL%kmax))

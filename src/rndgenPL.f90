@@ -1,11 +1,9 @@
 module rndgenPL_mod
+   use rndgen_kinds_mod
    use rndgen_mod
    implicit none
    private
 
-   integer, parameter :: dp = selected_real_kind(15) ! 8-byte reals
-   integer, parameter :: i8 = selected_int_kind(8) ! 4-byte integers
-   integer, parameter :: i16 = selected_int_kind(16) ! 8-byte integers
    real(kind=dp), parameter :: am = 4.656612873077392578d-10 ! multiplier 1/2^31
 
    !> Random number generator object for power-law distribution, adapted from Silvio C. Ferreira code.
@@ -16,7 +14,7 @@ module rndgenPL_mod
 
       ! parameters
       real(kind=dp) :: gamma
-      integer(kind=i16) :: kmin, kmax
+      integer(kind=i4) :: kmin, kmax
 
       ! auxiliar distribution
       real(kind=dp), private, allocatable :: prob(:)
@@ -32,7 +30,7 @@ contains
    !> Initializes the power-law random number generator
    subroutine initPL_rndgenPL(this, kmin, kmax, gama, iseed)
       class(rndgenPL) :: this
-      integer(kind=i16), intent(in) :: kmin, kmax
+      integer(kind=i4), intent(in) :: kmin, kmax
       real(kind=dp), intent(in) :: gama
       integer, intent(in), optional :: iseed
       integer(kind=kind(kmax)) :: j
@@ -66,7 +64,7 @@ contains
    function rndPL_rndgenPL(this) result(rnd_number)
       class(rndgenPL) :: this
       real(kind=dp) :: z, x
-      integer(kind=i16) :: j, rnd_number
+      integer(kind=i4) :: j, rnd_number
 
       do
          z = this%rnd()

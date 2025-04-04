@@ -1,15 +1,19 @@
 program example
-use rndgen_mod
-implicit none
+    use rndgen_kinds_mod
+    use rndgen_mod
+    implicit none
 
-    integer :: i, j
-    integer :: seed = 294727492
+    integer(kind=i4) :: i
+    integer(kind=i4) :: seed
+    real(kind=dp) :: x
     
     ! Declare the generator
     type(rndgen) :: generator
     
     ! Declare the object to IO operations of the seed
     type(rndSeed) :: saved_seed
+
+    seed = 294727492
     
     open(1, file='example_save.seed')
 
@@ -30,7 +34,7 @@ implicit none
     write(*,*) "Reset and save the state after the 5 first rnd"
     call generator%reset()
     do i = 1, 5
-        j = generator%rnd()
+        x = generator%rnd()
     enddo
     call generator%save_seed(saved_seed, 1)
     
