@@ -1,14 +1,15 @@
 program example
-use rndgen_mod
-implicit none
+    use rndgen_kinds_mod
+    use rndgen_mod
+    implicit none
 
     ! How to use:
     ! ./a.out seed1 seed2
 
-    type(rndgen) :: generators(2)    ! rnd list
-    integer :: aux                  ! auxiliar de leitura
-    character*64 :: caux            ! auxiliar de leitura
-    integer :: i
+    type(rndgen) :: generators(2)   ! rnd list
+    integer(kind=i4) :: aux                  ! aux
+    character(len=64) :: caux       ! aux
+    integer(kind=i4) :: i
     
     if (iargc() /= 2) stop 'give two arguments: seed1 seed2'
 

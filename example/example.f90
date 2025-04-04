@@ -1,10 +1,10 @@
 program example
-   use iso_fortran_env, only : i4 => int32, i8 => int64, sp => real32, dp => real64
+   use rndgen_kinds_mod
    use rndgen_mod
    implicit none
 
-   integer :: i
-   integer :: seed = 294727492
+   integer(kind=i4) :: i
+   integer(kind=i4) :: seed = 294727492
 
    ! Declare the generator
    type(rndgen) :: generator
@@ -19,7 +19,7 @@ program example
 
    write (*, *) "10 random integers between 5 and 2587:"
    do i = 1, 10
-      write (*, *) generator%int(5_i8, 2587_i8)
+      write (*, *) generator%int(5, 2587)
    end do
 
    write (*, *) "10 random real between -5.2 and 100.9:"
@@ -39,7 +39,7 @@ program example
 
    write (*, *) "10 random integers between 5 and 2587:"
    do i = 1, 10
-    write (*, *) generator%int(5_i8, 2587_i8)
+    write (*, *) generator%int(5, 2587)
    end do
 
    write (*, *) "10 random real between -5.2 and 100.9:"

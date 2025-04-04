@@ -31,7 +31,7 @@
 !-----------------------------------------------------------------------------
 
 module rndgen_mod
-   use iso_fortran_env, only : i4 => int32, i8 => int64, sp => real32, dp => real64
+   use rndgen_kinds_mod
    implicit none
    private
 
@@ -53,8 +53,12 @@ module rndgen_mod
    contains
 
       procedure :: rnd => rnd_rndgen_dp  ! generates a random number in the range [0, 1)
-      procedure :: int => int_rndgen_i8 ! generates a random integer number in the range [i1, i2]
+      procedure :: int => int_rndgen_i4 ! generates a random integer number in the range [i1, i2]
+
+      ! aliases:
       procedure :: int_i4 => int_rndgen_i4
+      procedure :: int_i8 => int_rndgen_i8
+
       procedure :: real => real_rndgen_dp ! generates a random real number in the range [r1, r2)
       procedure :: real_sp => real_rndgen_sp ! generates a random real number in the range [r1, r2)
 
@@ -103,7 +107,7 @@ contains
       integer(kind=i4), intent(in) :: i1, i2
       integer(kind=i4) :: rnd_number
 
-      rnd_number = int(this%int(int(i1,kind=i8), int(i2,kind=i8)), kind=i4)
+      rnd_number = min(int(this%rnd()*(i2 + 1 - i1)) + i1, i2) ! returns in range [i1, i2]
    end function
 
    !> Generates a random real number in the range [r1, r2), double
