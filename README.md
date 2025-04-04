@@ -104,7 +104,7 @@ To generate an array of size `n`, use `generatorPL%rndPL_array(n)`
 Using Fpm, execute:
 
 ```bash
-fpm run --example example
+fpm run --example simple
 ```
 
 to run the first example. The list of examples is as follows:
@@ -116,6 +116,7 @@ to run the first example. The list of examples is as follows:
 - `2gen`: Runs two generators simultaneously. Usage: `fpm run --example example-2gen -- seed1 seed2`
 - `2gen-invert`: Same as the previous example, but swaps the seeds after a reset.
 - `PL`: Generates four sequences of power-law distributed random numbers.
+- `PL-arrays`: Generates an array of power-law distributed random numbers.
 
 Expected outputs are available at `example/output-*.txt`.
 
