@@ -71,6 +71,9 @@ To generate a random number, use:
 - `generator%rnd()` for a real number in the range [0,1)
 - `generator%int(i1, i2)` for an integer number in the range [i1, i2]
 - `generator%real(r1, r2)` for a real number in the range [r1, r2)
+- `generator%rnd_array(n)` for a real array with numbers in range [0,1) with size `n`
+- `generator%rnd_array(n,i1,i2)` for a integer array with numbers in the range [i1, i2] with size `n`
+- `generator%rnd_array(n,r1,r2)` for a real array with numbers in the range [r1, r2) with size `n`
 
 Reset the generator (to start again with the same sequence) with `generator%reset()`.
 
@@ -94,6 +97,8 @@ Declare the object with `type(rndgenPL) :: generatorPL`, and initialize it with 
 
 To generate the number, use `generatorPL%rndPL()`.
 
+To generate an array of size `n`, use `generatorPL%rndPL_array(n)`
+
 ## Running examples
 
 Using Fpm, execute:
@@ -104,12 +109,13 @@ fpm run --example example
 
 to run the first example. The list of examples is as follows:
 
-- `example`: Generates 10 random numbers between 0 and 1, integers between 5 and 2587, and floats between -5.2 and 100.9, resets, and repeats the process.
-- `example-vojta`: Original example by Thomas Vojta, from <https://web.mst.edu/vojtat/class_5403/kiss05/rtest.f90>
-- `example-save`: Generates 10 random numbers, resets, and saves the state after 5 runs. Then, reads from the file.
-- `example-2gen`: Runs two generators simultaneously. Usage: `fpm run --example example-2gen -- seed1 seed2`
-- `example-2gen-invert`: Same as the previous example, but swaps the seeds after a reset.
-- `example-PL`: Generates four sequences of power-law distributed random numbers.
+- `simple`: Generates 10 random numbers between 0 and 1, integers between 5 and 2587, and floats between -5.2 and 100.9, resets, and repeats the process.
+- `arrays`: Generates 10 random numbers between 0 and 1, integers between 5 and 2587, and floats between -5.2 and 100.9, resets, and repeats the process, using the array generator
+- `vojta`: Original example by Thomas Vojta, from <https://web.mst.edu/vojtat/class_5403/kiss05/rtest.f90>
+- `save`: Generates 10 random numbers, resets, and saves the state after 5 runs. Then, reads from the file.
+- `2gen`: Runs two generators simultaneously. Usage: `fpm run --example example-2gen -- seed1 seed2`
+- `2gen-invert`: Same as the previous example, but swaps the seeds after a reset.
+- `PL`: Generates four sequences of power-law distributed random numbers.
 
 Expected outputs are available at `example/output-*.txt`.
 

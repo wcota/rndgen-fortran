@@ -21,6 +21,8 @@ module rndgenPL_mod
    contains
       procedure :: rndPL => rndPL_rndgenPL ! generates a random number following the power-law distribution
       procedure :: initPL => initPL_rndgenPL ! initializes the power-law random number generator
+
+      procedure :: rndPL_array ! generate an array with PL distribution
    end type
 
    public :: rndgenPL
@@ -80,4 +82,14 @@ contains
       rnd_number = j
 
    end function
+
+   function rndPL_array(gen, n) result(arr)
+      class(rndgenPL), intent(in) :: gen
+      integer(kind=i4), intent(in) :: n
+      integer(kind=i4) :: i
+      integer(kind=i4), allocatable :: arr(:)
+ 
+      arr = [(gen%rndPL(), i = 1, n)]
+ 
+  end function rndPL_array
 end module
