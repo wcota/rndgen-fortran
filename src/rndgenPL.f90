@@ -67,11 +67,14 @@ contains
       class(rndgenPL) :: this
       real(kind=dp) :: z, x
       integer(kind=i4) :: j, rnd_number
-
+      
       do
-         z = this%rnd()
-         x = (this%x0 - z*(this%x0 - this%xc))**this%expo
-         j = ceiling(x)
+         j = this%kmin - 1
+         do while (j < this%kmin)
+            z = this%rnd()
+            x = (this%x0 - z*(this%x0 - this%xc))**this%expo
+            j = ceiling(x)
+         end do
 
          z = this%rnd()
 
