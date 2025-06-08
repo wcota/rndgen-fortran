@@ -27,7 +27,7 @@
 ! Email     : wesley@wcota.me
 ! Homepage  : http://wcota.me
 ! Date      : 08 Jun 2025
-! Version   : 1.0.4
+! Version   : 1.0.5
 !-----------------------------------------------------------------------------
 
 module rndgen_mod
@@ -301,7 +301,7 @@ contains
       character(len=*), intent(in) :: filename
       integer :: und
 
-      open(newunit=und, file=filename, status='replace', form='formatted', action='write')
+      open(newunit=und, file=filename, status='old', form='formatted', action='read')
       call this%readFromFile(und)
       close(und)
 
