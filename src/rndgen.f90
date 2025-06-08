@@ -26,8 +26,8 @@
 ! Author    : Wesley Cota
 ! Email     : wesley@wcota.me
 ! Homepage  : http://wcota.me
-! Date      : 14 Apr 2025
-! Version   : 1.0.1
+! Date      : 08 Jun 2025
+! Version   : 1.0.2
 !-----------------------------------------------------------------------------
 
 module rndgen_mod
