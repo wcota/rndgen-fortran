@@ -27,7 +27,7 @@
 ! Email     : wesley@wcota.me
 ! Homepage  : http://wcota.me
 ! Date      : 08 Jun 2025
-! Version   : 1.0.3
+! Version   : 1.0.4
 !-----------------------------------------------------------------------------
 
 module rndgen_mod
@@ -69,8 +69,12 @@ module rndgen_mod
       procedure :: init => init_rndgen
       procedure :: reset => reset_rndgen
 
-      procedure :: save_seed => save_seed_rndgen
-      procedure :: read_seed => read_seed_rndgen
+      procedure, private :: save_seed_rndgen
+      procedure, private :: save_seed_filename_rndgen
+      procedure, private :: read_seed_rndgen
+      procedure, private :: read_seed_filename_rndgen
+      generic :: save_seed => save_seed_rndgen, save_seed_filename_rndgen
+      generic :: read_seed => read_seed_rndgen, read_seed_filename_rndgen
 
       generic :: rnd_array => rnd_array_rnd, rnd_array_real, rnd_array_int_i4
       procedure :: rnd_array_i4 => rnd_array_int_i4
@@ -221,6 +225,18 @@ contains
 
    end subroutine
 
+   !> Save the current seeds to a seeds object and, optionally, to a file name
+   subroutine save_seed_filename_rndgen(this, u_mseed, filename)
+      class(rndgen) :: this
+      type(rndSeed), intent(out) :: u_mseed
+      character(len=*), intent(in) :: filename
+
+      u_mseed = this%seed
+
+      call u_mseed%saveToFile(filename)
+
+   end subroutine
+
    !> Read the seeds from a seeds object or, optionally, from a file unit
    subroutine read_seed_rndgen(this, u_mseed, und)
       class(rndgen) :: this
@@ -228,6 +244,18 @@ contains
       integer, intent(in), optional :: und
 
       if (present(und)) call u_mseed%readFromFile(und)
+
+      this%seed = u_mseed
+
+   end subroutine
+
+   !> Read the seeds from a seeds object or, optionally, from a file name
+   subroutine read_seed_filename_rndgen(this, u_mseed, filename)
+      class(rndgen) :: this
+      type(rndSeed), intent(in) :: u_mseed
+      character(len=*), intent(in) :: filename
+
+      call u_mseed%readFromFile(filename)
 
       this%seed = u_mseed
 
