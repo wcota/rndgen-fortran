@@ -1,5 +1,5 @@
 module rndgenPL_mod
-   use rndgen_kinds_mod
+    use iso_fortran_env, only : i4 => int32, i8 => int64, sp => real32, dp => real64
    use rndgen_mod
    implicit none
    private
@@ -67,11 +67,14 @@ contains
       class(rndgenPL) :: this
       real(kind=dp) :: z, x
       integer(kind=i4) :: j, rnd_number
-
+      
       do
-         z = this%rnd()
-         x = (this%x0 - z*(this%x0 - this%xc))**this%expo
-         j = ceiling(x)
+         j = this%kmin - 1
+         do while (j < this%kmin)
+            z = this%rnd()
+            x = (this%x0 - z*(this%x0 - this%xc))**this%expo
+            j = ceiling(x)
+         end do
 
          z = this%rnd()
 

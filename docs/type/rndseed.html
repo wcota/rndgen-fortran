@@ -89,7 +89,7 @@
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title="<p>16.2% of total for derived types.</p>Including implementation: 19 statements,  5.2% of total for derived types.">6 statements</a>
+                 title="<p>24.4% of total for derived types.</p>Including implementation: 40 statements, 10.2% of total for derived types.">10 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -158,6 +158,10 @@
       </a>
       <div id="boundprocs-0" class="collapse">
         <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../type/rndseed.html#boundprocedure-savetofile_rndseed">saveToFile_rndSeed</a>
+            <a class="list-group-item" href="../type/rndseed.html#boundprocedure-savetofile_filename_rndseed">saveToFile_filename_rndSeed</a>
+            <a class="list-group-item" href="../type/rndseed.html#boundprocedure-readfromfile_rndseed">readFromFile_rndSeed</a>
+            <a class="list-group-item" href="../type/rndseed.html#boundprocedure-readfromfile_filename_rndseed">readFromFile_filename_rndSeed</a>
             <a class="list-group-item" href="../type/rndseed.html#boundprocedure-savetofile">saveToFile</a>
             <a class="list-group-item" href="../type/rndseed.html#boundprocedure-readfromfile">readFromFile</a>
         </div>
@@ -324,10 +328,10 @@ said component(s).
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-savetofile"></span>
+      <span class="anchor" id="boundprocedure-savetofile_rndseed"></span>
       <h3>
-          procedure, public ::
-  <strong>saveToFile</strong> => <a href='/data/repos/wcota.me/mod_rndgen/docs/proc/savetofile_rndseed.html'>saveToFile_rndSeed</a>
+          procedure, private ::
+  <strong>saveToFile_rndSeed</strong>
         
       </h3>
     </div>
@@ -393,10 +397,79 @@ said component(s).
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-readfromfile"></span>
+      <span class="anchor" id="boundprocedure-savetofile_filename_rndseed"></span>
       <h3>
-          procedure, public ::
-  <strong>readFromFile</strong> => <a href='/data/repos/wcota.me/mod_rndgen/docs/proc/readfromfile_rndseed.html'>readFromFile_rndSeed</a>
+          procedure, private ::
+  <strong>saveToFile_filename_rndSeed</strong>
+        
+      </h3>
+    </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
+    private  subroutine <a href='../proc/savetofile_filename_rndseed.html'>saveToFile_filename_rndSeed</a>(this, filename)  
+</h3>
+    
+
+  <p>Save the seeds to a file name</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='rndseed.html'>rndSeed</a>)
+            </td>
+<td></td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>filename</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+          </li>
+      </ul>
+  </div>
+
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-readfromfile_rndseed"></span>
+      <h3>
+          procedure, private ::
+  <strong>readFromFile_rndSeed</strong>
         
       </h3>
     </div>
@@ -446,6 +519,321 @@ said component(s).
             </td>
             <td>::</td>
             <td><strong>und</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+          </li>
+      </ul>
+  </div>
+
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-readfromfile_filename_rndseed"></span>
+      <h3>
+          procedure, private ::
+  <strong>readFromFile_filename_rndSeed</strong>
+        
+      </h3>
+    </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
+    private  subroutine <a href='../proc/readfromfile_filename_rndseed.html'>readFromFile_filename_rndSeed</a>(this, filename)  
+</h3>
+    
+
+  <p>Read the seeds from a file name</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='rndseed.html'>rndSeed</a>)
+            </td>
+<td></td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>filename</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+          </li>
+      </ul>
+  </div>
+
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-savetofile"></span>
+      <h3>
+          generic, public ::
+  <strong>saveToFile</strong> => <a href='/data/repos/wcota.me/mod_rndgen/docs/type/rndseed.html#boundprocedure-savetofile_rndseed'>saveToFile_rndSeed</a>, <a href='/data/repos/wcota.me/mod_rndgen/docs/type/rndseed.html#boundprocedure-savetofile_filename_rndseed'>saveToFile_filename_rndSeed</a>
+        
+      </h3>
+    </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
+    private  subroutine <a href='../proc/savetofile_rndseed.html'>saveToFile_rndSeed</a>(this, und)  
+</h3>
+    
+
+  <p>Save the seeds to a file unit</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='rndseed.html'>rndSeed</a>)
+            </td>
+<td></td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>und</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+          </li>
+          <li class="list-group-item">
+                    <h3>
+    private  subroutine <a href='../proc/savetofile_filename_rndseed.html'>saveToFile_filename_rndSeed</a>(this, filename)  
+</h3>
+    
+
+  <p>Save the seeds to a file name</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='rndseed.html'>rndSeed</a>)
+            </td>
+<td></td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>filename</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+          </li>
+      </ul>
+  </div>
+
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-readfromfile"></span>
+      <h3>
+          generic, public ::
+  <strong>readFromFile</strong> => <a href='/data/repos/wcota.me/mod_rndgen/docs/type/rndseed.html#boundprocedure-readfromfile_rndseed'>readFromFile_rndSeed</a>, <a href='/data/repos/wcota.me/mod_rndgen/docs/type/rndseed.html#boundprocedure-readfromfile_filename_rndseed'>readFromFile_filename_rndSeed</a>
+        
+      </h3>
+    </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
+    private  subroutine <a href='../proc/readfromfile_rndseed.html'>readFromFile_rndSeed</a>(this, und)  
+</h3>
+    
+
+  <p>Read the seeds from a file unit</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='rndseed.html'>rndSeed</a>)
+            </td>
+<td></td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>und</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+          </li>
+          <li class="list-group-item">
+                    <h3>
+    private  subroutine <a href='../proc/readfromfile_filename_rndseed.html'>readFromFile_filename_rndSeed</a>(this, filename)  
+</h3>
+    
+
+  <p>Read the seeds from a file name</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='rndseed.html'>rndSeed</a>)
+            </td>
+<td></td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>this</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>filename</strong></td>
             <td>
 
             </td>

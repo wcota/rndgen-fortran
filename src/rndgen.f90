@@ -27,7 +27,7 @@
 ! Email     : wesley@wcota.me
 ! Homepage  : http://wcota.me
 ! Date      : 08 Jun 2025
-! Version   : 1.0.2
+! Version   : 1.0.3
 !-----------------------------------------------------------------------------
 
 module rndgen_mod
@@ -41,8 +41,12 @@ module rndgen_mod
    type :: rndSeed
       integer(kind=i4), private :: mseed(4)
    contains
-      procedure :: saveToFile => saveToFile_rndSeed
-      procedure :: readFromFile => readFromFile_rndSeed
+      procedure, private :: saveToFile_rndSeed
+      procedure, private :: saveToFile_filename_rndSeed
+      procedure, private :: readFromFile_rndSeed
+      procedure, private :: readFromFile_filename_rndSeed
+      generic :: saveToFile => saveToFile_rndSeed, saveToFile_filename_rndSeed
+      generic :: readFromFile => readFromFile_rndSeed, readFromFile_filename_rndSeed
    end type
 
    !> Random number generator object with its procedures
@@ -240,6 +244,19 @@ contains
 
    end subroutine
 
+   !> Save the seeds to a file name
+   subroutine saveToFile_filename_rndSeed(this, filename)
+      implicit none
+      class(rndSeed) :: this
+      character(len=*), intent(in) :: filename
+      integer :: und
+
+      open(newunit=und, file=filename, status='replace', form='formatted', action='write')
+      call this%saveToFile(und)
+      close(und)
+
+   end subroutine
+
    !> Read the seeds from a file unit
    subroutine readFromFile_rndSeed(this, und)
       class(rndSeed) :: this
@@ -247,6 +264,18 @@ contains
       integer :: i
 
       read (und, *) (this%mseed(i), i=1, 4)
+
+   end subroutine
+
+   !> Read the seeds from a file name
+   subroutine readFromFile_filename_rndSeed(this, filename)
+      class(rndSeed) :: this
+      character(len=*), intent(in) :: filename
+      integer :: und
+
+      open(newunit=und, file=filename, status='replace', form='formatted', action='write')
+      call this%readFromFile(und)
+      close(und)
 
    end subroutine
 
