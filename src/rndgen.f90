@@ -84,9 +84,9 @@ module rndgen_mod
       procedure, private :: rnd_array_int_i4
       
       generic :: fill_array => fill_rnd_array_rnd, fill_rnd_array_real, fill_rnd_array_int_i4
-      procedure :: fill_rnd_array_rnd
-      procedure :: fill_rnd_array_real
-      procedure :: fill_rnd_array_int_i4
+      procedure, private :: fill_rnd_array_rnd
+      procedure, private :: fill_rnd_array_real
+      procedure, private :: fill_rnd_array_int_i4
       
 
    end type
