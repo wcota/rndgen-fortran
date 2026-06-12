@@ -82,6 +82,12 @@ module rndgen_mod
       procedure, private :: rnd_array_rnd
       procedure, private :: rnd_array_real
       procedure, private :: rnd_array_int_i4
+      
+      generic :: fill_array => fill_rnd_array_rnd, fill_rnd_array_real, fill_rnd_array_int_i4
+      procedure, private :: fill_rnd_array_rnd
+      procedure, private :: fill_rnd_array_real
+      procedure, private :: fill_rnd_array_int_i4
+      
 
    end type
 
@@ -352,4 +358,33 @@ contains
 
  end function rnd_array_int_i8
 
+!> Fills an array with real numbers in the range [0, 1)
+ subroutine fill_rnd_array_rnd( gen , arr )
+      class(rndgen) , intent(in) :: gen
+      real(kind=dp) , intent(out) :: arr(:)
+      integer(kind=i4) :: i
+      do i = 1, size(arr)
+        arr(i) = gen%rnd()
+      end do
+ end subroutine fill_rnd_array_rnd
+!> Fills an array with real numbers in the range [r1, r2)
+ subroutine fill_rnd_array_real( gen , arr , r1 , r2 )
+      class(rndgen) , intent(in) :: gen
+      real(kind=dp) , intent(out) :: arr(:)
+      real(kind=dp) , intent(in) :: r1 , r2
+      integer(kind=i4) :: i
+      do i = 1, size(arr)
+        arr(i) = gen%real( r1 , r2 )
+      end do
+ end subroutine fill_rnd_array_real
+!> Fills an array with integer numbers in the range [i1, i2)
+ subroutine fill_rnd_array_int_i4( gen , arr , i1 , i2 )
+      class(rndgen) , intent(in) :: gen
+      integer(kind=i4) , intent(out) :: arr(:)
+      integer(kind=i4) , intent(in) :: i1 , i2
+      integer(kind=i4) :: i
+      do i = 1, size(arr)
+        arr(i) = gen%int( i1 , i2 )
+      end do
+ end subroutine fill_rnd_array_int_i4
 end module
