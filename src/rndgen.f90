@@ -19,6 +19,13 @@ module rndgen_mod
     !> Container for seeds IO
     type :: rndgen_state_t
         integer(kind=i8) :: data(4)
+    contains
+        procedure, private :: save_state_to_unit => rndgen_state_t_save_state_to_unit
+        procedure, private :: read_state_from_unit => rndgen_state_t_read_state_from_unit
+        procedure, private :: save_state_to_file => rndgen_state_t_save_state_to_file
+        procedure, private :: read_state_from_file => rndgen_state_t_read_state_from_file
+        generic, public :: save_state => save_state_to_unit, save_state_to_file
+        generic, public :: read_state => read_state_from_unit, read_state_from_file
     end type
 
     !> Abstract random generator type. This is the base type for all random number generators.
@@ -36,8 +43,8 @@ module rndgen_mod
         procedure(rndgen_t_next_integer_iface), deferred, pass(this) :: next_integer
 
         ! -- deferred procedures for getting and setting the seed
-        procedure(rndgen_t_get_seed_iface), deferred, pass(this) :: get_seed
-        procedure(rndgen_t_set_seed_iface), deferred, pass(this) :: set_seed
+        procedure(rndgen_t_get_state_iface), deferred, pass(this) :: get_state
+        procedure(rndgen_t_set_state_iface), deferred, pass(this) :: set_state
 
         ! -- main scalar random number generation procedure
         procedure(rndgen_t_rnd_dp_iface), deferred, pass(this) :: rnd_dp
@@ -97,13 +104,13 @@ module rndgen_mod
             class(rndgen_base_t), intent(inout) :: this
         end subroutine
 
-        function rndgen_t_get_seed_iface(this) result(seed)
+        function rndgen_t_get_state_iface(this) result(seed)
             import :: rndgen_base_t, rndgen_state_t
             class(rndgen_base_t), intent(in) :: this
             type(rndgen_state_t) :: seed
         end function
 
-        subroutine rndgen_t_set_seed_iface(this, seed)
+        subroutine rndgen_t_set_state_iface(this, seed)
             import :: rndgen_base_t, rndgen_state_t
             class(rndgen_base_t), intent(inout) :: this
             type(rndgen_state_t), intent(in) :: seed
@@ -131,8 +138,8 @@ module rndgen_mod
         procedure, public :: init_i8 => rndgen_kiss_t_init_i8
         procedure, public :: reset => rndgen_kiss_t_reset
         procedure, public :: next_integer => rndgen_kiss_t_next_integer
-        procedure, public :: get_seed => rndgen_kiss_t_get_seed
-        procedure, public :: set_seed => rndgen_kiss_t_set_seed
+        procedure, public :: get_state => rndgen_kiss_t_get_state
+        procedure, public :: set_state => rndgen_kiss_t_set_state
         procedure, public :: rnd_dp => rndgen_kiss_t_rnd_dp
     end type
 
@@ -213,7 +220,7 @@ contains
     end function
 
     !> Returns the current seed of the KISS random number generator
-    function rndgen_kiss_t_get_seed(this) result(seed)
+    function rndgen_kiss_t_get_state(this) result(seed)
         class(rndgen_kiss_t), intent(in) :: this
         type(rndgen_state_t) :: seed
 
@@ -221,7 +228,7 @@ contains
     end function
 
     !> Sets the current seed of the KISS random number generator
-    subroutine rndgen_kiss_t_set_seed(this, seed)
+    subroutine rndgen_kiss_t_set_state(this, seed)
         class(rndgen_kiss_t), intent(inout) :: this
         type(rndgen_state_t), intent(in) :: seed
 
@@ -457,5 +464,53 @@ contains
         allocate(arr(n))
         call this%fill_bool(arr)
     end function
+
+    !> ==== State saving and reading procedures ====
+
+    !> Saves the state of the random number generator to a unit
+    subroutine rndgen_state_t_save_state_to_unit(this, unit)
+        class(rndgen_state_t), intent(in) :: this
+        integer(kind=i4), intent(in) :: unit
+        integer(kind=i4) :: i
+
+        write(unit, *) (this%data(i), i=1, 4)
+    end subroutine
+
+    !> Reads the state of the random number generator from a unit
+    subroutine rndgen_state_t_read_state_from_unit(this, unit)
+        class(rndgen_state_t), intent(out) :: this
+        integer(kind=i4), intent(in) :: unit
+        integer(kind=i4) :: i
+
+        read(unit, *) (this%data(i), i=1, 4)
+    end subroutine
+
+    !> Saves the state of the random number generator to a file
+    subroutine rndgen_state_t_save_state_to_file(this, filename)
+        class(rndgen_state_t), intent(in) :: this
+        character(len=*), intent(in) :: filename
+        integer(kind=i4) :: unit, iostat
+
+        open(newunit=unit, file=filename, status='replace', action='write', iostat=iostat)
+        if (iostat /= 0) then
+            error stop "Error opening file"
+        end if
+        call rndgen_state_t_save_state_to_unit(this, unit)
+        close(unit)
+    end subroutine
+
+    !> Reads the state of the random number generator from a file
+    subroutine rndgen_state_t_read_state_from_file(this, filename)
+        class(rndgen_state_t), intent(out) :: this
+        character(len=*), intent(in) :: filename
+        integer(kind=i4) :: unit, iostat
+
+        open(newunit=unit, file=filename, status='old', action='read', iostat=iostat)
+        if (iostat /= 0) then
+            error stop "Error opening file"
+        end if
+        call rndgen_state_t_read_state_from_unit(this, unit)
+        close(unit)
+    end subroutine
 
 end module
