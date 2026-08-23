@@ -306,8 +306,14 @@ contains
         integer(kind=i4), intent(out) :: arr(:)
         integer(kind=i4), intent(in) :: i1, i2
         integer(kind=i4) :: i
+        integer(kind=i8) :: range_8, i1_8, i2_8
+
+        i1_8 = int(i1, kind=i8)
+        i2_8 = int(i2, kind=i8)
+        range_8 = i2_8 - i1_8 + 1_i8
+
         do i = 1, size(arr)
-            arr(i) = this%int_i4(i1, i2)
+            arr(i) = int(min(int(this%rnd_dp() * range_8, kind=i8) + i1_8, i2_8), kind=i4)
         end do
     end subroutine
 
@@ -317,8 +323,12 @@ contains
         integer(kind=i8), intent(out) :: arr(:)
         integer(kind=i8), intent(in) :: i1, i2
         integer(kind=i4) :: i
+        real(kind=dp) :: range_dp
+
+        range_dp = real(i2, kind=dp) - real(i1, kind=dp) + 1.0_dp
+
         do i = 1, size(arr)
-            arr(i) = this%int_i8(i1, i2)
+            arr(i) = min(int(this%rnd_dp() * range_dp, kind=i8) + i1, i2)
         end do
     end subroutine
 
@@ -328,8 +338,13 @@ contains
         real(kind=sp), intent(out) :: arr(:)
         real(kind=sp), intent(in) :: r1, r2
         integer(kind=i4) :: i
+        real(kind=sp) :: range_sp
+
+        ! optimization to avoid repeated range calculation
+        range_sp = r2 - r1
+
         do i = 1, size(arr)
-            arr(i) = this%real_sp(r1, r2)
+            arr(i) = r1 + range_sp * this%rnd_sp()
         end do
     end subroutine
 
@@ -339,8 +354,13 @@ contains
         real(kind=dp), intent(out) :: arr(:)
         real(kind=dp), intent(in) :: r1, r2
         integer(kind=i4) :: i
+        real(kind=dp) :: range_dp
+
+        ! optimization to avoid repeated range calculation
+        range_dp = r2 - r1
+
         do i = 1, size(arr)
-            arr(i) = this%real_dp(r1, r2)
+            arr(i) = r1 + range_dp * this%rnd_dp()
         end do
     end subroutine
 end module
