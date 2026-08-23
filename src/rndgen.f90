@@ -66,6 +66,18 @@ module rndgen_mod
 
         ! -- generic interfaces for filling arrays
         generic, public :: fill_array => fill_rnd_dp, fill_int_i4, fill_int_i8, fill_real_sp, fill_real_dp, fill_bool
+
+        ! -- generate arrays of random numbers
+        procedure, public :: rnd_dp_array => rndgen_t_rnd_dp_array ! generates an array of random numbers in the range [0, 1)
+        procedure, public :: int_i4_array => rndgen_t_int_i4_array ! generates an array of random integer numbers in the range [i1, i2]
+        procedure, public :: int_i8_array => rndgen_t_int_i8_array ! generates an array of random integer numbers in the range [i1, i2]
+        procedure, public :: real_sp_array => rndgen_t_real_sp_array ! generates an array of random real numbers in the range [r1, r2)
+        procedure, public :: real_dp_array => rndgen_t_real_dp_array ! generates an array of random real numbers in the range [r1, r2)
+        procedure, public :: bool_array => rndgen_t_bool_array ! generates an array of random boolean values (true or false)
+
+        generic, public :: rnd_array => rnd_dp_array
+        generic, public :: int_array => int_i4_array, int_i8_array
+        generic, public :: real_array => real_sp_array, real_dp_array
     end type
 
     !> Abstract interface for the random number generator type
@@ -114,7 +126,7 @@ module rndgen_mod
 
     type, extends(rndgen_base_t) :: rndgen_kiss_t
         private
-        integer(kind=i4) :: oseed ! original seed used to initialize the random number generator
+        integer(kind=i4), public :: oseed ! original seed used to initialize the random number generator
         integer(kind=i4) :: mseed(4) ! the 4 seeds used by the random number generator
     contains
         procedure, public :: init_i4 => rndgen_kiss_t_init_i4
@@ -379,5 +391,73 @@ contains
             arr(i) = this%rnd_dp() < 0.5_dp
         end do
     end subroutine
+
+    !> ===== Generate arrays of random numbers procedures =====
+
+    !> rnd_sp_array: generates an array of random numbers in the range [0, 1) using single precision
+    function rndgen_t_rnd_sp_array(this, n) result(arr)
+        class(rndgen_base_t), intent(inout) :: this
+        integer(kind=i4), intent(in) :: n
+        real(kind=sp), allocatable :: arr(:)
+        allocate(arr(n))
+        call this%fill_rnd_sp(arr)
+    end function
+
+    !> rnd_dp_array: generates an array of random numbers in the range [0, 1) using double precision
+    function rndgen_t_rnd_dp_array(this, n) result(arr)
+        class(rndgen_base_t), intent(inout) :: this
+        integer(kind=i4), intent(in) :: n
+        real(kind=dp), allocatable :: arr(:)
+        allocate(arr(n))
+        call this%fill_rnd_dp(arr)
+    end function
+
+    !> int_i4_array: generates an array of random integer numbers in the range [i1, i2] using int32
+    function rndgen_t_int_i4_array(this, n, i1, i2) result(arr)
+        class(rndgen_base_t), intent(inout) :: this
+        integer(kind=i4), intent(in) :: n, i1, i2
+        integer(kind=i4), allocatable :: arr(:)
+        allocate(arr(n))
+        call this%fill_int_i4(arr, i1, i2)
+    end function
+
+    !> int_i8_array: generates an array of random integer numbers in the range [i1, i2] using int64
+    function rndgen_t_int_i8_array(this, n, i1, i2) result(arr)
+        class(rndgen_base_t), intent(inout) :: this
+        integer(kind=i4), intent(in) :: n
+        integer(kind=i8), intent(in) :: i1, i2
+        integer(kind=i8), allocatable :: arr(:)
+        allocate(arr(n))
+        call this%fill_int_i8(arr, i1, i2)
+    end function
+
+    !> real_sp_array: generates an array of random real numbers in the range [r1, r2) using single precision
+    function rndgen_t_real_sp_array(this, n, r1, r2) result(arr)
+        class(rndgen_base_t), intent(inout) :: this
+        integer(kind=i4), intent(in) :: n
+        real(kind=sp), intent(in) :: r1, r2
+        real(kind=sp), allocatable :: arr(:)
+        allocate(arr(n))
+        call this%fill_real_sp(arr, r1, r2)
+    end function
+
+    !> real_dp_array: generates an array of random real numbers in the range [r1, r2) using double precision
+    function rndgen_t_real_dp_array(this, n, r1, r2) result(arr)
+        class(rndgen_base_t), intent(inout) :: this
+        integer(kind=i4), intent(in) :: n
+        real(kind=dp), intent(in) :: r1, r2
+        real(kind=dp), allocatable :: arr(:)
+        allocate(arr(n))
+        call this%fill_real_dp(arr, r1, r2)
+    end function
+
+    !> bool_array: generates an array of random boolean values (true or false)
+    function rndgen_t_bool_array(this, n) result(arr)
+        class(rndgen_base_t), intent(inout) :: this
+        integer(kind=i4), intent(in) :: n
+        logical, allocatable :: arr(:)
+        allocate(arr(n))
+        call this%fill_bool(arr)
+    end function
 
 end module
