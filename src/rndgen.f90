@@ -242,7 +242,11 @@ contains
         class(rndgen_base_t), intent(inout) :: this
         integer(kind=i4), intent(in) :: i1, i2
         integer(kind=i4) :: rnd_number
-        rnd_number = min(int(this%rnd_dp()*(i2 + 1 - i1)) + i1, i2) ! returns in range [i1, i2]
+        integer(kind=i8) :: range_8
+
+        range_8 = int(i2, kind=i8) - int(i1, kind=i8) + 1_i8
+
+        rnd_number = int(min(int(this%rnd_dp() * range_8, kind=i8) + int(i1, kind=i8), int(i2, kind=i8)), kind=i4) ! returns in range [i1, i2]
     end function
 
     !> int_i8: generates a random integer number in the range [i1, i2] using int64
@@ -250,7 +254,11 @@ contains
         class(rndgen_base_t), intent(inout) :: this
         integer(kind=i8), intent(in) :: i1, i2
         integer(kind=i8) :: rnd_number
-        rnd_number = min(int(this%rnd_dp()*(i2 + 1 - i1)) + i1, i2) ! returns in range [i1, i2]
+        real(kind=dp) :: range_dp
+
+        range_dp = real(i2, kind=dp) - real(i1, kind=dp) + 1.0_dp
+
+        rnd_number = min(int(this%rnd_dp() * range_dp, kind=i8) + i1, i2) ! returns in range [i1, i2]
     end function
 
     !> real_sp: generates a random real number in the range [r1, r2) using single precision
@@ -274,7 +282,7 @@ contains
     !> fill_rnd_dp: fills an array with random numbers in the range [0, 1) using double precision
     subroutine rndgen_t_fill_rnd_dp(this, arr)
         class(rndgen_base_t), intent(inout) :: this
-        real(kind=dp), intent(inout) :: arr(:)
+        real(kind=dp), intent(out) :: arr(:)
         integer(kind=i4) :: i
 
         do i = 1, size(arr)
@@ -285,7 +293,7 @@ contains
     !> fill_rnd_sp: fills an array with random numbers in the range [0, 1) using single precision
     subroutine rndgen_t_fill_rnd_sp(this, arr)
         class(rndgen_base_t), intent(inout) :: this
-        real(kind=sp), intent(inout) :: arr(:)
+        real(kind=sp), intent(out) :: arr(:)
         integer(kind=i4) :: i
         do i = 1, size(arr)
             arr(i) = this%rnd_sp()
@@ -295,7 +303,7 @@ contains
     !> fill_int_i4: fills an array with random integer numbers in the range [i1, i2] using int32
     subroutine rndgen_t_fill_int_i4(this, arr, i1, i2)
         class(rndgen_base_t), intent(inout) :: this
-        integer(kind=i4), intent(inout) :: arr(:)
+        integer(kind=i4), intent(out) :: arr(:)
         integer(kind=i4), intent(in) :: i1, i2
         integer(kind=i4) :: i
         do i = 1, size(arr)
@@ -306,7 +314,7 @@ contains
     !> fill_int_i8: fills an array with random integer numbers in the range [i1, i2] using int64
     subroutine rndgen_t_fill_int_i8(this, arr, i1, i2)
         class(rndgen_base_t), intent(inout) :: this
-        integer(kind=i8), intent(inout) :: arr(:)
+        integer(kind=i8), intent(out) :: arr(:)
         integer(kind=i8), intent(in) :: i1, i2
         integer(kind=i4) :: i
         do i = 1, size(arr)
@@ -317,7 +325,7 @@ contains
     !> fill_real_sp: fills an array with random real numbers in the range [r1, r2) using single precision
     subroutine rndgen_t_fill_real_sp(this, arr, r1, r2)
         class(rndgen_base_t), intent(inout) :: this
-        real(kind=sp), intent(inout) :: arr(:)
+        real(kind=sp), intent(out) :: arr(:)
         real(kind=sp), intent(in) :: r1, r2
         integer(kind=i4) :: i
         do i = 1, size(arr)
@@ -328,7 +336,7 @@ contains
     !> fill_real_dp: fills an array with random real numbers in the range [r1, r2) using double precision
     subroutine rndgen_t_fill_real_dp(this, arr, r1, r2)
         class(rndgen_base_t), intent(inout) :: this
-        real(kind=dp), intent(inout) :: arr(:)
+        real(kind=dp), intent(out) :: arr(:)
         real(kind=dp), intent(in) :: r1, r2
         integer(kind=i4) :: i
         do i = 1, size(arr)
