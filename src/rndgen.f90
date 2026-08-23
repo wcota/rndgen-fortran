@@ -126,10 +126,7 @@ module rndgen_mod
         procedure, public :: rnd_dp => rndgen_kiss_t_rnd_dp
     end type
 
-    type, extends(rndgen_kiss_t) :: rndgen ! for backward compatibility
-    end type
-
-    public :: rndgen_kiss_t, rndgen
+    public :: rndgen_state_t, rndgen_base_t, rndgen_kiss_t
 
 contains
 
