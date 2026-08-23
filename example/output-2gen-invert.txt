@@ -23,7 +23,7 @@
   0.46308240061625838     
   0.97352509200572968     
  
- Inverting the seeds...
+ Inverting the seeds and generating at the same time...
  seed1:    21382147
  seed2:    21382144
   0.78528756275773048        4.4515722431242466E-002
