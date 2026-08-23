@@ -68,16 +68,14 @@ module rndgen_mod
         generic, public :: fill_array => fill_rnd_dp, fill_int_i4, fill_int_i8, fill_real_sp, fill_real_dp, fill_bool
 
         ! -- generate arrays of random numbers
-        procedure, public :: rnd_dp_array => rndgen_t_rnd_dp_array ! generates an array of random numbers in the range [0, 1)
-        procedure, public :: int_i4_array => rndgen_t_int_i4_array ! generates an array of random integer numbers in the range [i1, i2]
-        procedure, public :: int_i8_array => rndgen_t_int_i8_array ! generates an array of random integer numbers in the range [i1, i2]
-        procedure, public :: real_sp_array => rndgen_t_real_sp_array ! generates an array of random real numbers in the range [r1, r2)
-        procedure, public :: real_dp_array => rndgen_t_real_dp_array ! generates an array of random real numbers in the range [r1, r2)
-        procedure, public :: bool_array => rndgen_t_bool_array ! generates an array of random boolean values (true or false)
+        procedure, private :: rnd_dp_array => rndgen_t_rnd_dp_array ! generates an array of random numbers in the range [0, 1)
+        procedure, private :: int_i4_array => rndgen_t_int_i4_array ! generates an array of random integer numbers in the range [i1, i2]
+        procedure, private :: int_i8_array => rndgen_t_int_i8_array ! generates an array of random integer numbers in the range [i1, i2]
+        procedure, private :: real_sp_array => rndgen_t_real_sp_array ! generates an array of random real numbers in the range [r1, r2)
+        procedure, private :: real_dp_array => rndgen_t_real_dp_array ! generates an array of random real numbers in the range [r1, r2)
 
-        generic, public :: rnd_array => rnd_dp_array
-        generic, public :: int_array => int_i4_array, int_i8_array
-        generic, public :: real_array => real_sp_array, real_dp_array
+        generic, public :: rnd_array => rnd_dp_array, real_sp_array, real_dp_array, int_i4_array, int_i8_array
+        procedure, public :: bool_array => rndgen_t_bool_array ! generates an array of random boolean values (true or false)
     end type
 
     !> Abstract interface for the random number generator type
