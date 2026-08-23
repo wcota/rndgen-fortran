@@ -15,6 +15,7 @@ program example
     write (*, fmt) "10 random U(0,1):", generator%rnd_array(10)
     write (*, fmt) "10 random integers between 5 and 2587:", generator%rnd_array(10, 5, 2587)
     write (*, fmt) "10 random real between -5.2 and 100.9:", generator%rnd_array(10, -5.2_dp, 100.9_dp)
+    write (*, fmt) "10 random boolean values:", generator%bool_array(10)
 
     write (*, fmt) ""
     write (*, fmt) "Reset the generator and repeat"
@@ -23,5 +24,6 @@ program example
     write (*, fmt) "10 random U(0,1):", generator%rnd_array(10)
     write (*, fmt) "10 random integers between 5 and 2587:", generator%rnd_array(10, 5, 2587)
     write (*, fmt) "10 random real between -5.2 and 100.9:", generator%rnd_array(10, -5.2_dp, 100.9_dp)
+    write (*, fmt) "10 random boolean values:", generator%bool_array(10)
 
  end program
