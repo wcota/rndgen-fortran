@@ -53,6 +53,7 @@ module rndgen_mod
         generic, public :: rnd => rnd_dp ! default random number generator returns double precision
         generic, public :: int => int_i4, int_i8 ! will be resolved based on the integer kind of the arguments
         generic, public :: real => real_sp, real_dp ! will be resolved based on the real kind of the arguments
+        procedure, public :: bool => rndgen_t_bool ! generates a random boolean value (true or false)
 
         ! -- fill array procedures
         procedure, private :: fill_rnd_dp => rndgen_t_fill_rnd_dp ! fills an array with random numbers in the range [0, 1)
@@ -61,9 +62,10 @@ module rndgen_mod
         procedure, private :: fill_int_i8 => rndgen_t_fill_int_i8 ! fills an array with random integer numbers in the range [i1, i2]
         procedure, private :: fill_real_sp => rndgen_t_fill_real_sp ! fills an array with random real numbers in the range [r1, r2)
         procedure, private :: fill_real_dp => rndgen_t_fill_real_dp ! fills an array with random real numbers in the range [r1, r2)
+        procedure, private :: fill_bool => rndgen_t_fill_bool ! fills an array with random boolean values (true or false)
 
         ! -- generic interfaces for filling arrays
-        generic, public :: fill_array => fill_rnd_dp, fill_int_i4, fill_int_i8, fill_real_sp, fill_real_dp
+        generic, public :: fill_array => fill_rnd_dp, fill_int_i4, fill_int_i8, fill_real_sp, fill_real_dp, fill_bool
     end type
 
     !> Abstract interface for the random number generator type
@@ -277,6 +279,13 @@ contains
         rnd_number = r1 + (r2 - r1)*this%rnd_dp() ! returns in range [r1, r2)
     end function
 
+    !> bool: generates a random boolean value (true or false)
+    function rndgen_t_bool(this) result(rnd_bool)
+        class(rndgen_base_t), intent(inout) :: this
+        logical :: rnd_bool
+        rnd_bool = this%rnd_dp() < 0.5_dp ! returns true or false with equal probability
+    end function
+
     !> ===== Fill array procedures =====
 
     !> fill_rnd_dp: fills an array with random numbers in the range [0, 1) using double precision
@@ -363,4 +372,15 @@ contains
             arr(i) = r1 + range_dp * this%rnd_dp()
         end do
     end subroutine
+
+    !> fill_bool: fills an array with random boolean values (true or false)
+    subroutine rndgen_t_fill_bool(this, arr)
+        class(rndgen_base_t), intent(inout) :: this
+        logical, intent(out) :: arr(:)
+        integer(kind=i4) :: i
+        do i = 1, size(arr)
+            arr(i) = this%rnd_dp() < 0.5_dp
+        end do
+    end subroutine
+
 end module
