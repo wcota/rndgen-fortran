@@ -158,6 +158,9 @@ module rndgen_mod
         procedure, public :: rnd_dp => rndgen_xoshiro256_t_rnd_dp
     end type
 
+    type, extends(rndgen_xoshiro256_t) :: rndgen_t ! default random number generator type
+    end type
+
     public :: rndgen_state_t, rndgen_base_t, rndgen_kiss_t, rndgen_xoshiro256_t
 
 contains
