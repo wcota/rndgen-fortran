@@ -1,12 +1,46 @@
 ! ## File: rndgen_kiss_mod.f90
-! ## - module: random number generator. This is just a module to be used in another program.
 ! ## See README.md for more information and usage
 !-----------------------------------------------------------------------------
-! KISS random generator module, as object: can have multiple and independent generators!
 ! IMPORTANT:
-! THIS CODE WAS MODIFIED FROM http://web.mst.edu/~vojtat/class_5403/kiss05/rkiss05.f90
-! ! FORTRAN implementation by Thomas Vojta, vojta@mst.edu
-! ! built on a module found at www.fortran.com
+! THIS CODE WAS ADAPTED FROM https://web.archive.org/web/20240225163957/http://web.mst.edu/~vojtat/class_5403/kiss05/rkiss05.f90
+!
+! ORIGINAL COMMENTS:
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!
+! Random number generator KISS05 after a suggestion by George Marsaglia
+! in "Random numbers for C: The END?" posted on sci.crypt.random-numbers
+! in 1999
+!
+! version as in "double precision RNGs" in  sci.math.num-analysis
+! http://sci.tech-archive.net/Archive/sci.math.num-analysis/2005-11/msg00352.html
+!
+! The  KISS (Keep It Simple Stupid) random number generator. Combines:
+! (1) The congruential generator x(n)=69069*x(n-1)+1327217885, period 2^32.
+! (2) A 3-shift shift-register generator, period 2^32-1,
+! (3) Two 16-bit multiply-with-carry generators, period 597273182964842497>2^59
+! Overall period > 2^123
+!
+!
+! A call to rkiss05() gives one random real in the interval [0,1),
+! i.e., 0 <= rkiss05 < 1
+!
+! Before using rkiss05 call kissinit(seed) to initialize
+! the generator by random integers produced by Park/Millers
+! minimal standard LCG.
+! Seed should be any positive integer.
+!
+! FORTRAN implementation by Thomas Vojta, vojta@mst.edu
+! built on a module found at www.fortran.com
+!
+!
+! History:
+!        v0.9     Dec 11, 2010    first implementation
+!        V0.91    Dec 11, 2010    inlined internal function for the SR component
+!        v0.92    Dec 13, 2010    extra shuffle of seed in kissinit
+!        v093     Aug 13, 2012    changed inter representation test to avoid data statements
+!
+!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !-----------------------------------------------------------------------------
 
 module rndgen_kiss_mod
