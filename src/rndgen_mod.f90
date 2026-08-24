@@ -217,9 +217,9 @@ contains
         integer(kind=i8) :: res, t
 
         ! Calculate output: rotl(s1 * 5, 7) * 9
-        res = ishftc(this%mseed(2) * 5_i8, 7_i4) * 9_i8
+        res = ishftc(this%mseed(2) * 5, 7) * 9
 
-        t = shiftl(this%mseed(2), 17_i4)
+        t = shiftl(this%mseed(2), 17)
 
         this%mseed(3) = ieor(this%mseed(3), this%mseed(1))
         this%mseed(4) = ieor(this%mseed(4), this%mseed(2))
@@ -227,8 +227,7 @@ contains
         this%mseed(1) = ieor(this%mseed(1), this%mseed(4))
 
         this%mseed(3) = ieor(this%mseed(3), t)
-
-        this%mseed(4) = ishftc(this%mseed(4), 45_i4)
+        this%mseed(4) = ishftc(this%mseed(4), 45)
     end function
 
     !> Returns the current state of the xoshiro generator
