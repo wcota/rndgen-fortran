@@ -1,9 +1,9 @@
 name = "rndgen-fortran"
-version = "1.0.6"
-license = "GNU General Public License v3.0"
+version = "2.0.0"
+license = "LGPL-3.0-or-later"
 author = "Wesley Cota"
 maintainer = "wlcota@gmail.com"
-copyright = "Copyright 2024, Wesley Cota"
+copyright = "Copyright 2026, Wesley Cota"
 
 [fortran]
 implicit-typing = false
