@@ -34,12 +34,12 @@ program test_arrays
 
     write (*, *) ""
 
-    ! ==========================================
-    ! 4. Test Block Operations with Numerical Recipes ran2 RNG
-    ! ==========================================
-    allocate(rndgen_ran2_t :: rng)
-    call run_array_block_tests(rng, "Numerical Recipes ran2 RNG")
-    deallocate(rng)
+    ! ! ==========================================
+    ! ! 4. Test Block Operations with Numerical Recipes ran2 RNG
+    ! ! ==========================================
+    ! allocate(rndgen_ran2_t :: rng)
+    ! call run_array_block_tests(rng, "Numerical Recipes ran2 RNG")
+    ! deallocate(rng)
 
 contains
 

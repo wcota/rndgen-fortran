@@ -35,12 +35,12 @@ program test_autocorrelation
 
     write (*, *) ""
 
-    ! ==========================================
-    ! 4. Test Autocorrelation with Numerical Recipes ran2 RNG
-    ! ==========================================
-    allocate(rndgen_ran2_t :: rng)
-    call run_autocorrelation_test(rng, "Numerical Recipes ran2 RNG", N_SAMPLES)
-    deallocate(rng)
+    ! ! ==========================================
+    ! ! 4. Test Autocorrelation with Numerical Recipes ran2 RNG
+    ! ! ==========================================
+    ! allocate(rndgen_ran2_t :: rng)
+    ! call run_autocorrelation_test(rng, "Numerical Recipes ran2 RNG", N_SAMPLES)
+    ! deallocate(rng)
 
 contains
 

@@ -34,12 +34,12 @@ program test_integers
 
     write (*, *) ""
 
-    ! ==========================================
-    ! 4. Test Integer functionalities with Numerical Recipes ran2 RNG
-    ! ==========================================
-    allocate(rndgen_ran2_t :: rng)
-    call run_integer_tests(rng, "Numerical Recipes ran2 RNG")
-    deallocate(rng)
+    ! ! ==========================================
+    ! ! 4. Test Integer functionalities with Numerical Recipes ran2 RNG
+    ! ! ==========================================
+    ! allocate(rndgen_ran2_t :: rng)
+    ! call run_integer_tests(rng, "Numerical Recipes ran2 RNG")
+    ! deallocate(rng)
 
 contains
 

@@ -41,13 +41,13 @@ program test_benchmark_duel
     deallocate(rng)
     print *, ""
 
-    ! ==========================================
-    ! 4. ran2 (Numerical Recipes)
-    ! ==========================================
-    allocate(rndgen_ran2_t :: rng)
-    call run_benchmark(rng, "ran2", buffer)
-    deallocate(rng)
-    print *, ""
+    ! ! ==========================================
+    ! ! 4. ran2 (Numerical Recipes)
+    ! ! ==========================================
+    ! allocate(rndgen_ran2_t :: rng)
+    ! call run_benchmark(rng, "ran2", buffer)
+    ! deallocate(rng)
+    ! print *, ""
 
     print *, "=================================================="
     print *, "SUMMARY:"

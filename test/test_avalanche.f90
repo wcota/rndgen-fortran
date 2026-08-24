@@ -38,15 +38,15 @@ program test_avalanche
 
     write (*, *) ""
 
-    ! ==========================================
-    ! 4. Test Avalanche Effect with Numerical Recipes ran2 RNG
-    ! ==========================================
-    allocate(rndgen_ran2_t :: rng_a)
-    allocate(rndgen_ran2_t :: rng_b)
-    call run_avalanche_test(rng_a, rng_b, "Numerical Recipes ran2 RNG")
-    deallocate(rng_a, rng_b)
+    ! ! ==========================================
+    ! ! 4. Test Avalanche Effect with Numerical Recipes ran2 RNG
+    ! ! ==========================================
+    ! allocate(rndgen_ran2_t :: rng_a)
+    ! allocate(rndgen_ran2_t :: rng_b)
+    ! call run_avalanche_test(rng_a, rng_b, "Numerical Recipes ran2 RNG")
+    ! deallocate(rng_a, rng_b)
 
-    write (*, *) ""
+    ! write (*, *) ""
 
 contains
 

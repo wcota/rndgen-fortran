@@ -37,12 +37,12 @@ program test_advanced
     write (*, *) ""
     write (*, *) ""
 
-    ! ==========================================
-    ! 4. Run advanced tests on Numerical Recipes ran2 RNG
-    ! ==========================================
-    allocate(rndgen_ran2_t :: rng)
-    call run_advanced_metrics(rng, "Numerical Recipes ran2 RNG", N_SAMPLES)
-    deallocate(rng)
+    ! ! ==========================================
+    ! ! 4. Run advanced tests on Numerical Recipes ran2 RNG
+    ! ! ==========================================
+    ! allocate(rndgen_ran2_t :: rng)
+    ! call run_advanced_metrics(rng, "Numerical Recipes ran2 RNG", N_SAMPLES)
+    ! deallocate(rng)
 
 contains
 

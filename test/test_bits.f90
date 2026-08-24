@@ -35,12 +35,12 @@ program test_bits
     write (*, *) ""
     write (*, *) ""
 
-    ! ==========================================
-    ! 4. Test Bit Balance with Numerical Recipes ran2 RNG
-    ! ==========================================
-    allocate(rndgen_ran2_t :: rng)
-    call run_bit_tests(rng, "Numerical Recipes ran2 RNG")
-    deallocate(rng)
+    ! ! ==========================================
+    ! ! 4. Test Bit Balance with Numerical Recipes ran2 RNG
+    ! ! ==========================================
+    ! allocate(rndgen_ran2_t :: rng)
+    ! call run_bit_tests(rng, "Numerical Recipes ran2 RNG")
+    ! deallocate(rng)
 
 contains
 

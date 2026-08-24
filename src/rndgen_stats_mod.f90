@@ -31,8 +31,8 @@ contains
             select case (trim(selected_type))
             case ("kiss")
                 allocate(rndgen_kiss_t :: this%rng)
-            case ("ran2")
-                allocate(rndgen_ran2_t :: this%rng)
+            ! case ("ran2")
+            !     allocate(rndgen_ran2_t :: this%rng)
             case ("intrinsic")
                 allocate(rndgen_intrinsic_t :: this%rng)
             case default

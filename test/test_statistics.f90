@@ -34,12 +34,12 @@ program test_statistics
 
     write (*, *) ""
 
-    ! ==========================================
-    ! 4. Test Statistical Properties with Numerical Recipes ran2 RNG
-    ! ==========================================
-    allocate(rndgen_ran2_t :: rng)
-    call run_statistics_tests(rng, "Numerical Recipes ran2 RNG")
-    deallocate(rng)
+    ! ! ==========================================
+    ! ! 4. Test Statistical Properties with Numerical Recipes ran2 RNG
+    ! ! ==========================================
+    ! allocate(rndgen_ran2_t :: rng)
+    ! call run_statistics_tests(rng, "Numerical Recipes ran2 RNG")
+    ! deallocate(rng)
 
 contains
 

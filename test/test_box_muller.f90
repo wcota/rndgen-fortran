@@ -34,12 +34,12 @@ program test_box_muller
 
     write (*, *) ""
 
-    ! ==========================================
-    ! 4. Test Box-Muller Normal Distribution with Numerical Recipes ran2 RNG
-    ! ==========================================
-    allocate(rndgen_ran2_t :: rng)
-    call run_gaussian_tests(rng, "Numerical Recipes ran2 RNG")
-    deallocate(rng)
+    ! ! ==========================================
+    ! ! 4. Test Box-Muller Normal Distribution with Numerical Recipes ran2 RNG
+    ! ! ==========================================
+    ! allocate(rndgen_ran2_t :: rng)
+    ! call run_gaussian_tests(rng, "Numerical Recipes ran2 RNG")
+    ! deallocate(rng)
 
 contains
 
