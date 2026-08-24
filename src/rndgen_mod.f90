@@ -203,8 +203,6 @@ contains
         ! warm up the generator with the first random number
         rdum = this%rnd_dp()
 
-        print*, this%oseed, this%mseed
-
     end subroutine
 
     !> Reset the xoshiro256** random number generator to its original seed
