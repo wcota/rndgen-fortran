@@ -15,6 +15,7 @@ module rndgen_mod
     private
 
     real(kind=dp), parameter :: kiss_am = 4.656612873077392578e-10_dp ! multiplier 1/2^31
+    real(kind=dp), parameter :: xoshiro_am = 1.11022302462515654042e-16_dp ! 1/2^53
 
     !> Container for seeds IO
     type :: rndgen_state_t
@@ -143,9 +144,128 @@ module rndgen_mod
         procedure, public :: rnd_dp => rndgen_kiss_t_rnd_dp
     end type
 
-    public :: rndgen_state_t, rndgen_base_t, rndgen_kiss_t
+    type, extends(rndgen_base_t) :: rndgen_xoshiro256_t
+        private
+        integer(kind=i8), public :: oseed ! original seed used to initialize the random number generator
+        integer(kind=i8) :: mseed(4) ! the 4 seeds used by the random number generator
+    contains
+        procedure, public :: init_i4 => rndgen_xoshiro256_t_init_i4
+        procedure, public :: init_i8 => rndgen_xoshiro256_t_init_i8
+        procedure, public :: reset => rndgen_xoshiro256_t_reset
+        procedure, public :: next_integer => rndgen_xoshiro256_t_next_integer
+        procedure, public :: get_state => rndgen_xoshiro256_t_get_state
+        procedure, public :: set_state => rndgen_xoshiro256_t_set_state
+        procedure, public :: rnd_dp => rndgen_xoshiro256_t_rnd_dp
+    end type
+
+    public :: rndgen_state_t, rndgen_base_t, rndgen_kiss_t, rndgen_xoshiro256_t
 
 contains
+
+    !> ==== xoshiro256 random number generator procedures ====
+
+    !> Wrapper for the xoshiro initialization with int32 seed
+    subroutine rndgen_xoshiro256_t_init_i4(this, iseed)
+        class(rndgen_xoshiro256_t), intent(inout) :: this
+        integer(kind=i4), intent(in) :: iseed
+
+        call this%init_i8(int(iseed, kind=i8))
+    end subroutine
+
+    !> Initializes the xoshiro random number generator with a 64-bit integer seed
+    !> Adapted from https://github.com/fortran-lang/stdlib/blob/9a15c7772f1a76a6c497b9f3abb793841fc81f74/src/stats/stdlib_random.fypp
+    subroutine rndgen_xoshiro256_t_init_i8(this, iseed)
+        class(rndgen_xoshiro256_t), intent(inout) :: this
+        integer(kind=i8), intent(in) :: iseed
+        real(kind=dp) :: rdum
+
+        integer(kind=i8) :: sm_state, z
+        integer(kind=i4) :: i
+
+        ! Magic constants for SplitMix64 (from stdlib_random)
+        integer(kind=i8), parameter :: SM_C1 = -7046029254386353131_i8
+        integer(kind=i8), parameter :: SM_C2 = -4658895280553007687_i8
+        integer(kind=i8), parameter :: SM_C3 = -7723592293110705685_i8
+
+        this%oseed = iseed
+        sm_state = iseed
+
+        ! Warm up the SplitMix64 generator (discard 10 states as per stdlib)
+        do i = 1, 10
+            sm_state = sm_state + SM_C1
+            z = sm_state
+            z = ieor(z, shiftr(z, 30_i4)) * SM_C2
+            z = ieor(z, shiftr(z, 27_i4)) * SM_C3
+            z = ieor(z, shiftr(z, 31_i4))
+        end do
+
+        ! Fill the 4 states of xoshiro256**
+        do i = 1, 4
+            sm_state = sm_state + SM_C1
+            z = sm_state
+            z = ieor(z, shiftr(z, 30_i4)) * SM_C2
+            z = ieor(z, shiftr(z, 27_i4)) * SM_C3
+            z = ieor(z, shiftr(z, 31_i4))
+            this%mseed(i) = z
+        end do
+
+        ! warm up the generator with the first random number
+        rdum = this%rnd_dp()
+
+    end subroutine
+
+    !> Reset the xoshiro256** random number generator to its original seed
+    subroutine rndgen_xoshiro256_t_reset(this)
+        class(rndgen_xoshiro256_t), intent(inout) :: this
+        call this%init_i8(this%oseed)
+    end subroutine
+
+    !> Core function for xoshiro256** random number generation, returns a 64-bit integer
+    !> Adapted from https://github.com/fortran-lang/stdlib/blob/9a15c7772f1a76a6c497b9f3abb793841fc81f74/src/stats/stdlib_random.fypp
+    function rndgen_xoshiro256_t_next_integer(this) result(res)
+        class(rndgen_xoshiro256_t), intent(inout) :: this
+        integer(kind=i8) :: res, t
+
+        ! Calculate output: rotl(s1 * 5, 7) * 9
+        res = ishftc(this%mseed(2) * 5_i8, 7_i4) * 9_i8
+
+        t = shiftl(this%mseed(2), 17_i4)
+
+        this%mseed(3) = ieor(this%mseed(3), this%mseed(1))
+        this%mseed(4) = ieor(this%mseed(4), this%mseed(2))
+        this%mseed(2) = ieor(this%mseed(2), this%mseed(3))
+        this%mseed(1) = ieor(this%mseed(1), this%mseed(4))
+
+        this%mseed(3) = ieor(this%mseed(3), t)
+
+        this%mseed(4) = ishftc(this%mseed(4), 45_i4)
+    end function
+
+    !> Returns the current state of the xoshiro generator
+    function rndgen_xoshiro256_t_get_state(this) result(seed)
+        class(rndgen_xoshiro256_t), intent(in) :: this
+        type(rndgen_state_t) :: seed
+
+        ! Direct copy, no type conversion needed since xoshiro state is already i8
+        seed%data = this%mseed
+    end function
+
+    !> Sets the current state of the xoshiro generator
+    subroutine rndgen_xoshiro256_t_set_state(this, seed)
+        class(rndgen_xoshiro256_t), intent(inout) :: this
+        type(rndgen_state_t), intent(in) :: seed
+
+        this%mseed = seed%data
+    end subroutine
+
+    !> Generates a random number in the range [0, 1) using double precision (53 bits of entropy)
+    function rndgen_xoshiro256_t_rnd_dp(this) result(rnd_number)
+        class(rndgen_xoshiro256_t), intent(inout) :: this
+        real(kind=dp) :: rnd_number
+
+        ! Shift right by 11 bits to fit the 53-bit mantissa, then multiply by 1/2^53
+        rnd_number = real(shiftr(this%next_integer(), 11_i4), kind=dp) * xoshiro_am
+    end function
 
     !> ==== KISS random number generator procedures ====
 
