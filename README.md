@@ -33,19 +33,25 @@ rndgen-fortran = { git = "https://github.com/wcota/rndgen-fortran", tag = "v2" }
 
 ```fortran
 program demo_rndgen
+    use iso_fortran_env, only : i4 => int32, i8 => int64, sp => real32, dp => real64
     use rndgen_mod, only : rndgen_t
     implicit none
 
     type(rndgen_t) :: rng
+    call rng%init(42)  ! default integer (typically i4); i8 also works if needed
 
-    call rng%init(42)
-
-    print *, rng%rnd()            ! real(8) in [0, 1)
-    print *, rng%int(1, 10)       ! integer in [1, 10]
-    print *, rng%real(-1.0d0, 1.0d0) ! real(8) in [-1, 1)
-    print *, rng%bool()           ! logical
+    print *, rng%rnd()                    ! real(dp) in [0, 1)
+    print *, rng%int(1, 10)               ! default integer range; use i4/i8 explicitly if needed
+    print *, rng%real(-1.0_dp, 1.0_dp)    ! real(dp) in [-1, 1)
 end program demo_rndgen
 ```
+
+Kind aliases used above:
+
+- `i4 => int32`
+- `i8 => int64`
+- `sp => real32`
+- `dp => real64`
 
 ## Main Types
 
@@ -63,22 +69,24 @@ end program demo_rndgen
 ### Scalar generation
 
 - `rng%rnd()`
-  Returns `real(8)` in [0, 1).
+  Returns `real(dp)` in [0, 1).
+- `rng%rnd_sp()`
+  Returns `real(sp)` in [0, 1).
 - `rng%int(i1, i2)`
-  Returns integer in [i1, i2].
+  Returns `integer(i4)` or `integer(i8)` in [i1, i2], based on argument kinds.
 - `rng%real(r1, r2)`
-  Returns real in [r1, r2).
+  Returns `real(sp)` or `real(dp)` in [r1, r2), based on argument kinds.
 - `rng%bool()`
   Returns logical `.true.` or `.false.`.
 
 ### Array generation
 
 - `rng%rnd_array(n)`
-  Allocates and returns an array of random reals in [0, 1).
+  Allocates and returns a `real(dp)` array in [0, 1).
 - `rng%rnd_array(n, i1, i2)`
-  Allocates and returns an integer array in [i1, i2].
+  Allocates and returns an `integer(i4)` or `integer(i8)` array in [i1, i2].
 - `rng%rnd_array(n, r1, r2)`
-  Allocates and returns a real array in [r1, r2).
+  Allocates and returns a `real(sp)` or `real(dp)` array in [r1, r2).
 - `rng%bool_array(n)`
   Allocates and returns a logical array.
 
@@ -102,13 +110,14 @@ Example:
 
 ```fortran
 program demo_state
+    use iso_fortran_env, only : i8 => int64
     use rndgen_mod, only : rndgen_t, rndgen_state_t
     implicit none
 
     type(rndgen_t) :: rng
     type(rndgen_state_t) :: st
 
-    call rng%init(2026)
+    call rng%init(2026_i8)
     print *, rng%rnd()
 
     st = rng%get_state()
