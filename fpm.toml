@@ -9,6 +9,3 @@ copyright = "Copyright 2024, Wesley Cota"
 implicit-typing = false
 implicit-external = false
 source-form = "free"
-
-[dev-dependencies]
-julienne = {git = "https://github.com/berkeleylab/julienne", tag = "4.1.1"}
