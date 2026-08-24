@@ -2,6 +2,7 @@ program test_avalanche
     use iso_fortran_env, only: i4 => int32, dp => real64
     use julienne_m
     use rndgen_mod
+    use rndgen_legacy_mod
     implicit none
 
     class(rndgen_base_t), allocatable :: rng_a, rng_b
@@ -24,6 +25,28 @@ program test_avalanche
     allocate(rndgen_xoshiro256_t :: rng_b)
     call run_avalanche_test(rng_a, rng_b, "Xoshiro256**")
     deallocate(rng_a, rng_b)
+
+    write (*, *) ""
+
+    ! ==========================================
+    ! 3. Test Avalanche Effect with Fortran Intrinsic RNG
+    ! ==========================================
+    allocate(rndgen_intrinsic_t :: rng_a)
+    allocate(rndgen_intrinsic_t :: rng_b)
+    call run_avalanche_test(rng_a, rng_b, "Fortran Intrinsic RNG")
+    deallocate(rng_a, rng_b)
+
+    write (*, *) ""
+
+    ! ==========================================
+    ! 4. Test Avalanche Effect with Numerical Recipes ran2 RNG
+    ! ==========================================
+    allocate(rndgen_ran2_t :: rng_a)
+    allocate(rndgen_ran2_t :: rng_b)
+    call run_avalanche_test(rng_a, rng_b, "Numerical Recipes ran2 RNG")
+    deallocate(rng_a, rng_b)
+
+    write (*, *) ""
 
 contains
 

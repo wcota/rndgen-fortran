@@ -1,6 +1,7 @@
 program test_advanced
     use iso_fortran_env, only: i4 => int32, i8 => int64, sp => real32, dp => real64
     use rndgen_mod
+    use rndgen_legacy_mod
     implicit none
 
     class(rndgen_base_t), allocatable :: rng
@@ -21,6 +22,26 @@ program test_advanced
     ! ==========================================
     allocate(rndgen_xoshiro256_t :: rng)
     call run_advanced_metrics(rng, "Xoshiro256**", N_SAMPLES)
+    deallocate(rng)
+
+    write (*, *) ""
+    write (*, *) ""
+
+    ! ==========================================
+    ! 3. Run advanced tests on Fortran Intrinsic RNG
+    ! ==========================================
+    allocate(rndgen_intrinsic_t :: rng)
+    call run_advanced_metrics(rng, "Fortran Intrinsic RNG", N_SAMPLES)
+    deallocate(rng)
+
+    write (*, *) ""
+    write (*, *) ""
+
+    ! ==========================================
+    ! 4. Run advanced tests on Numerical Recipes ran2 RNG
+    ! ==========================================
+    allocate(rndgen_ran2_t :: rng)
+    call run_advanced_metrics(rng, "Numerical Recipes ran2 RNG", N_SAMPLES)
     deallocate(rng)
 
 contains

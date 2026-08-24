@@ -2,6 +2,7 @@ program test_autocorrelation
     use iso_fortran_env, only: i4 => int32, dp => real64
     use julienne_m
     use rndgen_mod
+    use rndgen_legacy_mod
     implicit none
 
     class(rndgen_base_t), allocatable :: rng
@@ -21,6 +22,24 @@ program test_autocorrelation
     ! ==========================================
     allocate(rndgen_xoshiro256_t :: rng)
     call run_autocorrelation_test(rng, "Xoshiro256**", N_SAMPLES)
+    deallocate(rng)
+
+    write (*, *) ""
+
+    ! ==========================================
+    ! 3. Test Autocorrelation with Fortran Intrinsic RNG
+    ! ==========================================
+    allocate(rndgen_intrinsic_t :: rng)
+    call run_autocorrelation_test(rng, "Fortran Intrinsic RNG", N_SAMPLES)
+    deallocate(rng)
+
+    write (*, *) ""
+
+    ! ==========================================
+    ! 4. Test Autocorrelation with Numerical Recipes ran2 RNG
+    ! ==========================================
+    allocate(rndgen_ran2_t :: rng)
+    call run_autocorrelation_test(rng, "Numerical Recipes ran2 RNG", N_SAMPLES)
     deallocate(rng)
 
 contains

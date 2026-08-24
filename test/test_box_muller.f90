@@ -2,6 +2,7 @@ program test_box_muller
     use iso_fortran_env, only: i4 => int32, dp => real64
     use julienne_m
     use rndgen_mod
+    use rndgen_legacy_mod
     implicit none
 
     class(rndgen_base_t), allocatable :: rng
@@ -20,6 +21,24 @@ program test_box_muller
     ! ==========================================
     allocate(rndgen_xoshiro256_t :: rng)
     call run_gaussian_tests(rng, "Xoshiro256**")
+    deallocate(rng)
+
+    write (*, *) ""
+
+    ! ==========================================
+    ! 3. Test Box-Muller Normal Distribution with Fortran Intrinsic RNG
+    ! ==========================================
+    allocate(rndgen_intrinsic_t :: rng)
+    call run_gaussian_tests(rng, "Fortran Intrinsic RNG")
+    deallocate(rng)
+
+    write (*, *) ""
+
+    ! ==========================================
+    ! 4. Test Box-Muller Normal Distribution with Numerical Recipes ran2 RNG
+    ! ==========================================
+    allocate(rndgen_ran2_t :: rng)
+    call run_gaussian_tests(rng, "Numerical Recipes ran2 RNG")
     deallocate(rng)
 
 contains
