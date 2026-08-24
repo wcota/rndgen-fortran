@@ -1,0 +1,23 @@
+ ==================================================
+ --- Testing Block Operations (Arrays) : KISS
+ ==================================================
+ [OK] Dynamic rnd_array correct.
+ [OK] fill_array (block integers) correct.
+
+ ==================================================
+ --- Testing Block Operations (Arrays) : Xoshiro256**
+ ==================================================
+ [OK] Dynamic rnd_array correct.
+ [OK] fill_array (block integers) correct.
+
+ ==================================================
+ --- Testing Block Operations (Arrays) : Fortran Intrinsic RNG
+ ==================================================
+ [OK] Dynamic rnd_array correct.
+ [OK] fill_array (block integers) correct.
+
+ ==================================================
+ --- Testing Block Operations (Arrays) : Numerical Recipes ran2 RNG
+ ==================================================
+ [OK] Dynamic rnd_array correct.
+ [OK] fill_array (block integers) correct.

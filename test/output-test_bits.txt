@@ -1,0 +1,32 @@
+ ==================================================
+ --- Testing Raw Bit Balance (Monobit) : KISS
+ ==================================================
+ Native bits evaluated  :           32
+ Total bits evaluated   :               3200000
+ Ratio of 1s (Ideal ~0.5):   0.48462843750000001     
+ [WARNING] Fail: Bit bias detected in KISS!
+ 
+ ==================================================
+ --- Testing Raw Bit Balance (Monobit) : Xoshiro256**
+ ==================================================
+ Native bits evaluated  :           64
+ Total bits evaluated   :               6400000
+ Ratio of 1s (Ideal ~0.5):   0.50034328125000005     
+ [OK] Raw bit balance verified successfully (50/50 symmetry)!
+ 
+ ==================================================
+ --- Testing Raw Bit Balance (Monobit) : Fortran Intrinsic RNG
+ ==================================================
+ Native bits evaluated  :           64
+ Total bits evaluated   :               6400000
+ Ratio of 1s (Ideal ~0.5):   0.41373874999999999     
+ [WARNING] Fail: Bit bias detected in Fortran Intrinsic RNG!
+ 
+ 
+ ==================================================
+ --- Testing Raw Bit Balance (Monobit) : Numerical Recipes ran2 RNG
+ ==================================================
+ Native bits evaluated  :           64
+ Total bits evaluated   :               6400000
+ Ratio of 1s (Ideal ~0.5):   0.42187765625000001     
+ [WARNING] Fail: Bit bias detected in Numerical Recipes ran2 RNG!

@@ -1,0 +1,13 @@
+ ==================================================
+ --- Testing Core and rnd() [0, 1) : KISS
+ ==================================================
+ [OK] rnd_dp and rnd_sp strictly respect [0, 1).
+ [OK] reset() successfully preserves the sequence.
+ [OK] get_state/set_state successfully preserve the sequence.
+ 
+ ==================================================
+ --- Testing Core and rnd() [0, 1) : Xoshiro256**
+ ==================================================
+ [OK] rnd_dp and rnd_sp strictly respect [0, 1).
+ [OK] reset() successfully preserves the sequence.
+ [OK] get_state/set_state successfully preserve the sequence.

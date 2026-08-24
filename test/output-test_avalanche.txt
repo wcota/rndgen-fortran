@@ -1,0 +1,32 @@
+ ==================================================
+ --- Testing Seed Avalanche Effect : KISS
+ ==================================================
+ Total samples compared           :     10000000
+ Sequences elements differing     :     10000000
+ Max absolute difference found    :   0.99954587267711759     
+ [OK] Perfect avalanche effect! Changing 1 bit in seed completely alters the output sequence.
+ 
+ ==================================================
+ --- Testing Seed Avalanche Effect : Xoshiro256**
+ ==================================================
+ Total samples compared           :     10000000
+ Sequences elements differing     :     10000000
+ Max absolute difference found    :   0.99958604197302159     
+ [OK] Perfect avalanche effect! Changing 1 bit in seed completely alters the output sequence.
+ 
+ ==================================================
+ --- Testing Seed Avalanche Effect : Fortran Intrinsic RNG
+ ==================================================
+ Total samples compared           :     10000000
+ Sequences elements differing     :     10000000
+ Max absolute difference found    :   0.99939866406825650     
+ [OK] Perfect avalanche effect! Changing 1 bit in seed completely alters the output sequence.
+ 
+ ==================================================
+ --- Testing Seed Avalanche Effect : Numerical Recipes ran2 RNG
+ ==================================================
+ Total samples compared           :     10000000
+ Sequences elements differing     :     10000000
+ Max absolute difference found    :   0.99983478895665945     
+ [OK] Perfect avalanche effect! Changing 1 bit in seed completely alters the output sequence.
+ 
