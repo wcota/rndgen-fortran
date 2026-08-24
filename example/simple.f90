@@ -31,41 +31,41 @@ contains
         write (*, *) "=================================================="
 
         ! Initialize it with the seed
-        call generator%init(seed)
+        call gen%init(seed_val)
 
         write (*, *) "10 random U(0,1):"
         do i = 1, 10
-            write (*, *) generator%rnd()
+            write (*, *) gen%rnd()
         end do
 
         write (*, *) "10 random integers between 5 and 2587:"
         do i = 1, 10
-            write (*, *) generator%int(5, 2587)
+            write (*, *) gen%int(5, 2587)
         end do
 
         write (*, *) "10 random real between -5.2 and 100.9:"
         do i = 1, 10
-            write (*, *) generator%real(-5.2_dp, 100.9_dp)
+            write (*, *) gen%real(-5.2_dp, 100.9_dp)
         end do
 
         write (*, *) ""
         write (*, *) ""
         write (*, *) "Reset the generator and repeat"
-        call generator%reset()
+        call gen%reset()
 
         write (*, *) "10 random U(0,1):"
         do i = 1, 10
-            write (*, *) generator%rnd()
+            write (*, *) gen%rnd()
         end do
 
         write (*, *) "10 random integers between 5 and 2587:"
         do i = 1, 10
-            write (*, *) generator%int(5, 2587)
+            write (*, *) gen%int(5, 2587)
         end do
 
         write (*, *) "10 random real between -5.2 and 100.9:"
         do i = 1, 10
-            write (*, *) generator%real(-5.2_dp, 100.9_dp)
+            write (*, *) gen%real(-5.2_dp, 100.9_dp)
         end do
 
     end subroutine run_tests
