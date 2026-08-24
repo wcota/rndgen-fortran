@@ -105,16 +105,16 @@ module rndgen_mod
             class(rndgen_base_t), intent(inout) :: this
         end subroutine
 
-        function rndgen_t_get_state_iface(this) result(seed)
+        function rndgen_t_get_state_iface(this) result(state)
             import :: rndgen_base_t, rndgen_state_t
             class(rndgen_base_t), intent(in) :: this
-            type(rndgen_state_t) :: seed
+            type(rndgen_state_t) :: state
         end function
 
-        subroutine rndgen_t_set_state_iface(this, seed)
+        subroutine rndgen_t_set_state_iface(this, state)
             import :: rndgen_base_t, rndgen_state_t
             class(rndgen_base_t), intent(inout) :: this
-            type(rndgen_state_t), intent(in) :: seed
+            type(rndgen_state_t), intent(in) :: state
         end subroutine
 
         function rndgen_t_rnd_dp_iface(this) result(rnd_number)
@@ -242,20 +242,20 @@ contains
     end function
 
     !> Returns the current state of the xoshiro generator
-    function rndgen_xoshiro256_t_get_state(this) result(seed)
+    function rndgen_xoshiro256_t_get_state(this) result(state)
         class(rndgen_xoshiro256_t), intent(in) :: this
-        type(rndgen_state_t) :: seed
+        type(rndgen_state_t) :: state
 
         ! Direct copy, no type conversion needed since xoshiro state is already i8
-        seed%data = this%mseed
+        state%data = this%mseed
     end function
 
     !> Sets the current state of the xoshiro generator
-    subroutine rndgen_xoshiro256_t_set_state(this, seed)
+    subroutine rndgen_xoshiro256_t_set_state(this, state)
         class(rndgen_xoshiro256_t), intent(inout) :: this
-        type(rndgen_state_t), intent(in) :: seed
+        type(rndgen_state_t), intent(in) :: state
 
-        this%mseed = seed%data
+        this%mseed = state%data
     end subroutine
 
     !> Generates a random number in the range [0, 1) using double precision (53 bits of entropy)
@@ -340,19 +340,19 @@ contains
     end function
 
     !> Returns the current seed of the KISS random number generator
-    function rndgen_kiss_t_get_state(this) result(seed)
+    function rndgen_kiss_t_get_state(this) result(state)
         class(rndgen_kiss_t), intent(in) :: this
-        type(rndgen_state_t) :: seed
+        type(rndgen_state_t) :: state
 
-        seed%data = int(this%mseed, kind=i8) ! convert to int64 for storage
+        state%data = int(this%mseed, kind=i8) ! convert to int64 for storage
     end function
 
     !> Sets the current seed of the KISS random number generator
-    subroutine rndgen_kiss_t_set_state(this, seed)
+    subroutine rndgen_kiss_t_set_state(this, state)
         class(rndgen_kiss_t), intent(inout) :: this
-        type(rndgen_state_t), intent(in) :: seed
+        type(rndgen_state_t), intent(in) :: state
 
-        this%mseed = int(seed%data, kind=i4)
+        this%mseed = int(state%data, kind=i4)
     end subroutine
 
     !> Generates a random number in the range [0, 1) using the KISS random number generator
