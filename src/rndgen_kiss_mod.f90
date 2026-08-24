@@ -1,3 +1,14 @@
+! ## File: rndgen_kiss_mod.f90
+! ## - module: random number generator. This is just a module to be used in another program.
+! ## See README.md for more information and usage
+!-----------------------------------------------------------------------------
+! KISS random generator module, as object: can have multiple and independent generators!
+! IMPORTANT:
+! THIS CODE WAS MODIFIED FROM http://web.mst.edu/~vojtat/class_5403/kiss05/rkiss05.f90
+! ! FORTRAN implementation by Thomas Vojta, vojta@mst.edu
+! ! built on a module found at www.fortran.com
+!-----------------------------------------------------------------------------
+
 module rndgen_kiss_mod
     use iso_fortran_env, only : i4 => int32, i8 => int64, sp => real32, dp => real64
     use rndgen_mod, only : rndgen_base_t, rndgen_state_t
