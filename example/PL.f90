@@ -17,7 +17,7 @@ program example
    seed = 294727492
 
    ! 1. Inicializa o motor de bits central
-   call generatorPL%init(iseed = seed)
+   call generatorPL%init(iseed = seed, gen_type = "kiss")
 
    ! 2. Inicializa os parâmetros da lei de potência
    call generatorPL%init_powerlaw(3, int(N**(1.0_dp/2.0_dp), kind=i4), 2.1_dp) ! kmin, kmax, gamma

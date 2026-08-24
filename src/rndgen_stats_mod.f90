@@ -1,6 +1,7 @@
 module rndgen_stats_mod
     use iso_fortran_env, only : i4 => int32, i8 => int64, dp => real64
-    use rndgen_mod, only : rndgen_base_t, rndgen_xoshiro256_t
+    use rndgen_mod, only : rndgen_base_t, rndgen_xoshiro256_t, rndgen_kiss_t
+    use rndgen_legacy_mod, only : rndgen_intrinsic_t, rndgen_ran2_t
     implicit none
     private
 
@@ -14,18 +15,32 @@ module rndgen_stats_mod
 
 contains
 
-    subroutine init_stats_engine(this, iseed)
+    subroutine init_stats_engine(this, iseed, gen_type)
         class(rndgen_stats_t), intent(inout) :: this
-        integer(kind=i4), intent(in), optional :: iseed
-        integer(kind=i8) :: seed_val
+        integer(kind=i4), intent(in) :: iseed
+        character(len=*), intent(in), optional :: gen_type
 
+        character(len=32) :: selected_type
+
+        ! Define default engine type
+        selected_type = "xoshiro"
+        if (present(gen_type)) selected_type = gen_type
+
+        ! Allocate the requested generator polymorphically
         if (.not. allocated(this%rng)) then
-            allocate(rndgen_xoshiro256_t :: this%rng)
+            select case (trim(selected_type))
+            case ("kiss")
+                allocate(rndgen_kiss_t :: this%rng)
+            case ("ran2")
+                allocate(rndgen_ran2_t :: this%rng)
+            case ("intrinsic")
+                allocate(rndgen_intrinsic_t :: this%rng)
+            case default
+                allocate(rndgen_xoshiro256_t :: this%rng) ! default generator
+            end select
         end if
 
-        seed_val = 1234_i8
-        if (present(iseed)) seed_val = int(iseed, kind=i8)
-        call this%rng%init(seed_val)
+        call this%rng%init(iseed)
     end subroutine
 
 end module rndgen_stats_mod
