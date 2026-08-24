@@ -183,18 +183,18 @@ contains
         do i = 1, 10
             sm_state = sm_state + SM_C1
             z = sm_state
-            z = ieor(z, shiftr(z, 30_i4)) * SM_C2
-            z = ieor(z, shiftr(z, 27_i4)) * SM_C3
-            z = ieor(z, shiftr(z, 31_i4))
+            z = ieor(z, shiftr(z, 30)) * SM_C2
+            z = ieor(z, shiftr(z, 27)) * SM_C3
+            z = ieor(z, shiftr(z, 31))
         end do
 
         ! Fill the 4 states of xoshiro256**
         do i = 1, 4
             sm_state = sm_state + SM_C1
             z = sm_state
-            z = ieor(z, shiftr(z, 30_i4)) * SM_C2
-            z = ieor(z, shiftr(z, 27_i4)) * SM_C3
-            z = ieor(z, shiftr(z, 31_i4))
+            z = ieor(z, shiftr(z, 30)) * SM_C2
+            z = ieor(z, shiftr(z, 27)) * SM_C3
+            z = ieor(z, shiftr(z, 31))
             this%mseed(i) = z
         end do
 
