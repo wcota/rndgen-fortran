@@ -172,9 +172,11 @@ contains
         integer(kind=i4) :: i
 
         ! Magic constants for SplitMix64 (from stdlib_random)
-        integer(kind=i8), parameter :: SM_C1 = -7046029254386353131_i8
-        integer(kind=i8), parameter :: SM_C2 = -4658895280553007687_i8
-        integer(kind=i8), parameter :: SM_C3 = -7723592293110705685_i8
+        ! Huge fix: These constants are now declared as volatile to prevent compiler optimizations that could lead to incorrect behavior.
+        ! This ensures that the values are always read from memory and not cached in registers, which is crucial for the correct functioning of the SplitMix64 algorithm.
+        integer(kind=i8), volatile :: SM_C1 = -7046029254386353131_i8
+        integer(kind=i8), volatile :: SM_C2 = -4658895280553007687_i8
+        integer(kind=i8), volatile :: SM_C3 = -7723592293110705685_i8
 
         this%oseed = iseed
         sm_state = iseed
@@ -200,6 +202,8 @@ contains
 
         ! warm up the generator with the first random number
         rdum = this%rnd_dp()
+
+        print*, this%oseed, this%mseed
 
     end subroutine
 
