@@ -253,7 +253,7 @@ contains
         real(kind=dp) :: rnd_number
 
         ! Shift right by 11 bits to fit the 53-bit mantissa, then multiply by 1/2^53
-        rnd_number = real(shiftr(this%next_integer(), 11_i4), kind=dp) * xoshiro_am
+        rnd_number = real(shiftr(this%next_integer(), 11), kind=dp) * xoshiro_am
     end function
 
     !> ==== General procedures ====
