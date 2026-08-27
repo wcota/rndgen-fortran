@@ -141,6 +141,9 @@ module rndgen_mod
         procedure, public :: get_state => rndgen_xoshiro256_t_get_state
         procedure, public :: set_state => rndgen_xoshiro256_t_set_state
         procedure, public :: rnd_dp => rndgen_xoshiro256_t_rnd_dp
+
+        procedure, public :: jump => rndgen_xoshiro256_t_jump
+        procedure, public :: long_jump => rndgen_xoshiro256_t_long_jump
     end type
 
     type, extends(rndgen_xoshiro256_t) :: rndgen_t ! default random number generator type
@@ -231,6 +234,74 @@ contains
         this%mseed(3) = ieor(this%mseed(3), t)
         this%mseed(4) = ishftc(this%mseed(4), 45)
     end function
+
+    !> Jump function for the xoshiro256** random number generator. It is equivalent to 2^128 calls to next(); it can be used to generate 2^128 non-overlapping subsequences for parallel computations.
+    subroutine rndgen_xoshiro256_t_jump(this)
+        class(rndgen_xoshiro256_t), intent(inout) :: this
+        integer(i8), parameter :: JUMP(4) = [ &
+            int(Z'180EC6D33CFD0ABA', i8), &
+            int(Z'D5A61266F0C9392C', i8), &
+            int(Z'A9582618E03FC9AA', i8), &
+            int(Z'39ABDC4529B1661C', i8) &
+        ]
+        integer(kind=i8) :: s0, s1, s2, s3, b, i
+        integer(kind=i8) :: idum
+
+        s0 = 0_i8
+        s1 = 0_i8
+        s2 = 0_i8
+        s3 = 0_i8
+
+        do i = 1, 4
+            do b = 0, 63
+                if (btest(JUMP(i), b)) then
+                    s0 = ieor(s0, this%mseed(1))
+                    s1 = ieor(s1, this%mseed(2))
+                    s2 = ieor(s2, this%mseed(3))
+                    s3 = ieor(s3, this%mseed(4))
+                end if
+                idum = this%next_integer()
+            end do
+        end do
+        this%mseed(1) = s0
+        this%mseed(2) = s1
+        this%mseed(3) = s2
+        this%mseed(4) = s3
+    end subroutine
+
+    !> Long jump function for the xoshiro256** random number generator. It is equivalent to 2^192 calls to next(); it can be used to generate 2^64 starting points, from each of which jump() will generate 2^64 non-overlapping subsequences for parallel distributed computations.
+    subroutine rndgen_xoshiro256_t_long_jump(this)
+        class(rndgen_xoshiro256_t), intent(inout) :: this
+        integer(i8), parameter :: LONG_JUMP(4) = [ &
+            int(Z'76E15D3EFEFDCBBF', i8), &
+            int(Z'C5004E441C522FB3', i8), &
+            int(Z'77710069854EE241', i8), &
+            int(Z'39109BB02ACBE635', i8) &
+        ]
+        integer(kind=i8) :: s0, s1, s2, s3, b, i
+        integer(kind=i8) :: idum
+
+        s0 = 0_i8
+        s1 = 0_i8
+        s2 = 0_i8
+        s3 = 0_i8
+
+        do i = 1, 4
+            do b = 0, 63
+                if (btest(LONG_JUMP(i), b)) then
+                    s0 = ieor(s0, this%mseed(1))
+                    s1 = ieor(s1, this%mseed(2))
+                    s2 = ieor(s2, this%mseed(3))
+                    s3 = ieor(s3, this%mseed(4))
+                end if
+                idum = this%next_integer()
+            end do
+        end do
+        this%mseed(1) = s0
+        this%mseed(2) = s1
+        this%mseed(3) = s2
+        this%mseed(4) = s3
+    end subroutine
 
     !> Returns the current state of the xoshiro generator
     function rndgen_xoshiro256_t_get_state(this) result(state)
