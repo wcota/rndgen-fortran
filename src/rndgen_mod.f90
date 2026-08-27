@@ -1,11 +1,11 @@
-! ## File: rndgen.f90
+! ## File: rndgen_mod.f90
 ! ## - module: random number generator. This is just a module to be used in another program.
 ! ## See README.md for more information and usage
 !-----------------------------------------------------------------------------
 ! Author    : Wesley Cota
 ! Email     : wesley@wcota.me
 ! Homepage  : http://wcota.me
-! Date      : 23 Aug 2026
+! Date      : 27 Aug 2026
 ! Version   : 2.0.0
 !-----------------------------------------------------------------------------
 
