@@ -133,6 +133,69 @@ program demo_state
 end program demo_state
 ```
 
+### Parallel subsequences: `jump` and `long_jump`
+
+`rndgen_xoshiro256_t` (and therefore `rndgen_t`) exposes two deterministic skip-ahead operations:
+
+- `call rng%jump()`
+  Advances the stream by $2^{128}$ steps.
+  Use this to create independent subsequences for thread-level parallelism.
+- `call rng%long_jump()`
+  Advances the stream by $2^{192}$ steps.
+  Use this to create very distant starting points (for example, per process/node), and then use `jump()` inside each process.
+
+Typical strategy for hybrid parallel runs:
+
+- `long_jump` partitions by process/node.
+- `jump` partitions by thread within each process.
+
+OpenMP example (one independent RNG per thread):
+
+```fortran
+program demo_openmp_jump
+    use iso_fortran_env, only : i4 => int32, i8 => int64
+    use omp_lib
+    use rndgen_mod, only : rndgen_t
+    implicit none
+
+    type(rndgen_t) :: master
+    type(rndgen_t), allocatable :: rngs(:)
+    integer(i4) :: nthreads, tid, i
+
+    call master%init(2026_i8)
+
+    ! 1. Planning (sequential)
+    ! Outside the parallel region, use omp_get_max_threads()
+    ! to know how many threads will be created.
+    nthreads = omp_get_max_threads()
+    allocate(rngs(nthreads))
+
+    ! 2. O(N) distribution (sequential)
+    ! The master performs the jumps and distributes prepared states.
+    ! This costs only one jump per allocated thread.
+    do i = 1, nthreads
+        rngs(i) = master
+        call master%jump()
+    end do
+
+    ! 3. Parallel execution
+    ! Threads start with a ready-to-use PRNG state,
+    ! without extra initialization cost.
+    !$omp parallel default(none) shared(rngs) private(tid)
+    tid = omp_get_thread_num()
+
+    print *, "thread", tid, "rnd =", rngs(tid + 1)%rnd()
+    !$omp end parallel
+
+end program demo_openmp_jump
+```
+
+Build with OpenMP enabled (example with `gfortran`):
+
+```bash
+gfortran -fopenmp demo_openmp_jump.f90 -o demo_openmp_jump
+```
+
 ## KISS Compatibility
 
 ⚠️ `rndgen_kiss_t` is still available in `rndgen_kiss_mod` for compatibility with legacy workflows.
