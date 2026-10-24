@@ -14,6 +14,8 @@ module rndgen_sampling_mod
     private
     integer(i4) :: lower, upper
     real(dp) :: gamma, log_ratio, point_probability
+    real(dp) :: continuous_probability, exponent, magnitude, tail, exp_delta
+    logical :: near_one
     logical :: initialized = .false.
   contains
     procedure :: init => powerlaw_init
@@ -171,6 +173,20 @@ contains
         envelope_integral(1.0_dp - gamma, this%log_ratio)
     end if
     this%point_probability = 1.0_dp/(1.0_dp + integral)
+    this%continuous_probability = 1.0_dp - this%point_probability
+
+    ! Cache only parameter-dependent terms. Keep the per-draw arithmetic
+    ! order so this optimization preserves the corrected sample streams.
+    this%exponent = 1.0_dp - gamma
+    this%magnitude = abs(this%exponent)
+    this%near_one = this%magnitude <= 0.5_dp/this%log_ratio
+    this%exp_delta = 0.0_dp
+    this%tail = 0.0_dp
+    if (this%near_one) then
+      this%exp_delta = expm1_small(this%exponent*this%log_ratio)
+    else if (this%magnitude <= 700.0_dp/this%log_ratio) then
+      this%tail = exp(-this%magnitude*this%log_ratio)
+    end if
   end subroutine powerlaw_init
 
   subroutine powerlaw_propose(this, uniform, x, value)
@@ -178,7 +194,7 @@ contains
     real(dp), intent(in) :: uniform
     real(dp), intent(out) :: x
     integer(i4), intent(out) :: value
-    real(dp) :: u, exponent, magnitude, tail, argument, delta, logarithm
+    real(dp) :: u, delta, logarithm
 
     if (.not. this%initialized) error stop 'Initialize the power-law sampler'
     if (uniform < this%point_probability .or. &
@@ -190,33 +206,26 @@ contains
     end if
 
     u = (uniform - this%point_probability)/ &
-      (1.0_dp - this%point_probability)
+      this%continuous_probability
     u = max(0.0_dp, min(u, nearest(1.0_dp, -1.0_dp)))
-    exponent = 1.0_dp - this%gamma
 
-    if (abs(exponent) <= 0.5_dp/this%log_ratio) then
-      argument = exponent*this%log_ratio
-      if (argument == 0.0_dp) then
+    if (this%near_one) then
+      if (this%exponent*this%log_ratio == 0.0_dp) then
         logarithm = u*this%log_ratio
       else
-        delta = u*expm1_small(argument)
-        logarithm = log1p_small(delta)/exponent
+        delta = u*this%exp_delta
+        logarithm = log1p_small(delta)/this%exponent
       end if
       x = real(this%lower, dp)*exp(logarithm)
     else
-      magnitude = abs(exponent)
-      tail = 0.0_dp
-      if (magnitude <= 700.0_dp/this%log_ratio) then
-        tail = exp(-magnitude*this%log_ratio)
-      end if
-      if (exponent < 0.0_dp) then
-        x = real(this%lower, dp)*exp(-log(1.0_dp - u + u*tail)/ &
-          magnitude)
+      if (this%exponent < 0.0_dp) then
+        x = real(this%lower, dp)*exp(-log(1.0_dp - u + u*this%tail)/ &
+          this%magnitude)
       else if (u == 0.0_dp) then
         x = real(this%lower, dp)
       else
-        x = real(this%upper, dp)*exp(log(u + (1.0_dp - u)*tail)/ &
-          magnitude)
+        x = real(this%upper, dp)*exp(log(u + (1.0_dp - u)*this%tail)/ &
+          this%magnitude)
       end if
     end if
 
