@@ -12,6 +12,9 @@
 module rndgen_mod
     use iso_fortran_env, only : i4 => int32, i8 => int64, sp => real32, dp => real64
   use rndgen_sampling_mod, only: integer_span, integer_add
+  use rndgen_sampling_mod, only: interval_dp, interval_sp
+  use rndgen_sampling_mod, only: validate_real_bounds
+  use rndgen_sampling_mod, only: interpolate_dp, interpolate_sp
     implicit none
     private
 
@@ -380,7 +383,8 @@ contains
     function rndgen_t_rnd_sp(this) result(rnd_number)
         class(rndgen_base_t), intent(inout) :: this
         real(kind=sp) :: rnd_number
-        rnd_number = real(this%rnd_dp(), kind=sp) ! returns in range [0, 1)
+    rnd_number = real(int(this%rnd_dp()*16777216.0_dp, i8), sp)* &
+      5.9604644775390625e-8_sp
     end function
 
     !> int_i4: generates a random integer number in the range [i1, i2] using int32
@@ -407,7 +411,7 @@ contains
         class(rndgen_base_t), intent(inout) :: this
         real(kind=sp), intent(in) :: r1, r2
         real(kind=sp) :: rnd_number
-        rnd_number = real(this%real_dp(real(r1, kind=dp), real(r2, kind=dp)), kind=sp) ! returns in range [r1, r2)
+    rnd_number = interval_sp(r1, r2, this%rnd_dp())
     end function
 
     !> real_dp: generates a random real number in the range [r1, r2) using double precision
@@ -415,7 +419,7 @@ contains
         class(rndgen_base_t), intent(inout) :: this
         real(kind=dp), intent(in) :: r1, r2
         real(kind=dp) :: rnd_number
-        rnd_number = r1 + (r2 - r1)*this%rnd_dp() ! returns in range [r1, r2)
+    rnd_number = interval_dp(r1, r2, this%rnd_dp())
     end function
 
     !> bool: generates a random boolean value (true or false)
@@ -489,13 +493,9 @@ contains
         real(kind=sp), intent(out) :: arr(:)
         real(kind=sp), intent(in) :: r1, r2
         integer(kind=i4) :: i
-        real(kind=sp) :: range_sp
-
-        ! optimization to avoid repeated range calculation
-        range_sp = r2 - r1
-
+    call validate_real_bounds(real(r1, dp), real(r2, dp))
         do i = 1, size(arr)
-            arr(i) = r1 + range_sp * this%rnd_sp()
+      arr(i) = interpolate_sp(r1, r2, this%rnd_dp())
         end do
     end subroutine
 
@@ -505,13 +505,9 @@ contains
         real(kind=dp), intent(out) :: arr(:)
         real(kind=dp), intent(in) :: r1, r2
         integer(kind=i4) :: i
-        real(kind=dp) :: range_dp
-
-        ! optimization to avoid repeated range calculation
-        range_dp = r2 - r1
-
+    call validate_real_bounds(r1, r2)
         do i = 1, size(arr)
-            arr(i) = r1 + range_dp * this%rnd_dp()
+      arr(i) = interpolate_dp(r1, r2, this%rnd_dp())
         end do
     end subroutine
 
