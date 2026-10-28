@@ -1,0 +1,10 @@
+{
+  "name": "rndgen-fortran",
+  "private": true,
+  "scripts": {
+    "docs:api": "formal generate --project docs/formal.md --output docs/api --diagrams",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
+  }
+}

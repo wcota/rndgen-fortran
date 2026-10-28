@@ -1,0 +1,14 @@
+# fpm build output
+build/
+
+# Fortran module and object files
+*.mod
+*.smod
+*.o
+
+# Docs (Node / VitePress / Python env)
+node_modules/
+docs/.vitepress/cache/
+docs/.vitepress/dist/
+docs/package-lock.json
+.venv/
