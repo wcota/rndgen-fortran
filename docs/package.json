@@ -1,0 +1,16 @@
+{
+  "name": "rndgen-fortran-docs",
+  "private": true,
+  "scripts": {
+    "docs:api": "formal generate --project formal.md --output api --diagrams",
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview"
+  },
+  "devDependencies": {
+    "markdown-it-mathjax3": "^4.3.2",
+    "mermaid": "^11.17.2",
+    "vitepress": "^1.6.3",
+    "vitepress-plugin-mermaid": "^2.0.17"
+  }
+}

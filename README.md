@@ -26,7 +26,7 @@ Add this dependency to your `fpm.toml`:
 
 ```toml
 [dependencies]
-rndgen-fortran = { git = "https://github.com/wcota/rndgen-fortran", tag = "v2" }
+rndgen-fortran = { git = "https://github.com/wcota/rndgen-fortran", tag = "v2.0.0" }
 ```
 
 ## Quick Start
