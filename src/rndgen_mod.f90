@@ -11,6 +11,7 @@
 
 module rndgen_mod
     use iso_fortran_env, only : i4 => int32, i8 => int64, sp => real32, dp => real64
+  use rndgen_sampling_mod, only: integer_span, integer_add
     implicit none
     private
 
@@ -41,6 +42,7 @@ module rndgen_mod
 
         ! -- deferred procedure for generating the next random integer
         procedure(rndgen_t_next_integer_iface), deferred, pass(this) :: next_integer
+    procedure, public :: random_bits => rndgen_t_random_bits
 
         ! -- deferred procedures for getting and setting the seed
         procedure(rndgen_t_get_state_iface), deferred, pass(this) :: get_state
@@ -138,6 +140,7 @@ module rndgen_mod
         procedure, public :: init_i8 => rndgen_xoshiro256_t_init_i8
         procedure, public :: reset => rndgen_xoshiro256_t_reset
         procedure, public :: next_integer => rndgen_xoshiro256_t_next_integer
+  procedure, public :: random_bits => rndgen_xoshiro256_t_random_bits
         procedure, public :: get_state => rndgen_xoshiro256_t_get_state
         procedure, public :: set_state => rndgen_xoshiro256_t_set_state
         procedure, public :: rnd_dp => rndgen_xoshiro256_t_rnd_dp
@@ -333,6 +336,46 @@ contains
 
     !> ===== Random number generation procedures =====
 
+  !> Default for custom engines: one unbiased comparison per requested bit.
+  !> Engines with a known word width override this without adding requirements
+  !> to existing subclasses of rndgen_base_t.
+  function rndgen_t_random_bits(this, nbits) result(value)
+    class(rndgen_base_t), intent(inout) :: this
+    integer, intent(in) :: nbits
+    integer(i8) :: value
+    integer :: bit
+
+    if (nbits < 0 .or. nbits > 64) error stop 'Bit count must be in [0,64]'
+    value = 0_i8
+    do bit = 1, nbits
+      value = ior(shiftl(value, 1), &
+        merge(1_i8, 0_i8, this%rnd_dp() < 0.5_dp))
+    end do
+  end function rndgen_t_random_bits
+
+  function rndgen_xoshiro256_t_random_bits(this, nbits) result(value)
+    class(rndgen_xoshiro256_t), intent(inout) :: this
+    integer, intent(in) :: nbits
+    integer(i8) :: value
+
+    if (nbits < 0 .or. nbits > 64) error stop 'Bit count must be in [0,64]'
+    value = 0_i8
+    if (nbits > 0) value = shiftr(this%next_integer(), 64 - nbits)
+  end function rndgen_xoshiro256_t_random_bits
+
+  function bounded_integer(this, lower, span, nbits) result(value)
+    class(rndgen_base_t), intent(inout) :: this
+    integer(i8), intent(in) :: lower, span
+    integer, intent(in) :: nbits
+    integer(i8) :: value, offset
+
+    do
+      offset = this%random_bits(nbits)
+      if (ble(offset, span)) exit
+    end do
+    value = integer_add(lower, offset)
+  end function bounded_integer
+
     !> rnd_sp: generates a random number in the range [0, 1) using single precision
     function rndgen_t_rnd_sp(this) result(rnd_number)
         class(rndgen_base_t), intent(inout) :: this
@@ -345,11 +388,7 @@ contains
         class(rndgen_base_t), intent(inout) :: this
         integer(kind=i4), intent(in) :: i1, i2
         integer(kind=i4) :: rnd_number
-        integer(kind=i8) :: range_8
-
-        range_8 = int(i2, kind=i8) - int(i1, kind=i8) + 1_i8
-
-        rnd_number = int(min(int(this%rnd_dp() * range_8, kind=i8) + int(i1, kind=i8), int(i2, kind=i8)), kind=i4) ! returns in range [i1, i2]
+    rnd_number = int(this%int_i8(int(i1, i8), int(i2, i8)), i4)
     end function
 
     !> int_i8: generates a random integer number in the range [i1, i2] using int64
@@ -357,11 +396,10 @@ contains
         class(rndgen_base_t), intent(inout) :: this
         integer(kind=i8), intent(in) :: i1, i2
         integer(kind=i8) :: rnd_number
-        real(kind=dp) :: range_dp
+    integer(i8) :: span
 
-        range_dp = real(i2, kind=dp) - real(i1, kind=dp) + 1.0_dp
-
-        rnd_number = min(int(this%rnd_dp() * range_dp, kind=i8) + i1, i2) ! returns in range [i1, i2]
+    span = integer_span(i1, i2)
+    rnd_number = bounded_integer(this, i1, span, 64 - leadz(span))
     end function
 
     !> real_sp: generates a random real number in the range [r1, r2) using single precision
@@ -416,14 +454,15 @@ contains
         integer(kind=i4), intent(out) :: arr(:)
         integer(kind=i4), intent(in) :: i1, i2
         integer(kind=i4) :: i
-        integer(kind=i8) :: range_8, i1_8, i2_8
+    integer(kind=i8) :: span, i1_8
+    integer :: nbits
 
         i1_8 = int(i1, kind=i8)
-        i2_8 = int(i2, kind=i8)
-        range_8 = i2_8 - i1_8 + 1_i8
+    span = integer_span(i1_8, int(i2, i8))
+    nbits = 64 - leadz(span)
 
         do i = 1, size(arr)
-            arr(i) = int(min(int(this%rnd_dp() * range_8, kind=i8) + i1_8, i2_8), kind=i4)
+      arr(i) = int(bounded_integer(this, i1_8, span, nbits), i4)
         end do
     end subroutine
 
@@ -433,12 +472,14 @@ contains
         integer(kind=i8), intent(out) :: arr(:)
         integer(kind=i8), intent(in) :: i1, i2
         integer(kind=i4) :: i
-        real(kind=dp) :: range_dp
+    integer(i8) :: span
+    integer :: nbits
 
-        range_dp = real(i2, kind=dp) - real(i1, kind=dp) + 1.0_dp
+    span = integer_span(i1, i2)
+    nbits = 64 - leadz(span)
 
         do i = 1, size(arr)
-            arr(i) = min(int(this%rnd_dp() * range_dp, kind=i8) + i1, i2)
+      arr(i) = bounded_integer(this, i1, span, nbits)
         end do
     end subroutine
 
