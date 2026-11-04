@@ -60,6 +60,7 @@ module rndgen_kiss_mod
         procedure, public :: init_i8 => rndgen_kiss_t_init_i8
         procedure, public :: reset => rndgen_kiss_t_reset
         procedure, public :: next_integer => rndgen_kiss_t_next_integer
+    procedure, public :: random_bits => rndgen_kiss_t_random_bits
         procedure, public :: get_state => rndgen_kiss_t_get_state
         procedure, public :: set_state => rndgen_kiss_t_set_state
         procedure, public :: rnd_dp => rndgen_kiss_t_rnd_dp
@@ -68,6 +69,23 @@ module rndgen_kiss_mod
     public :: rndgen_kiss_t
 
 contains
+
+  function rndgen_kiss_t_random_bits(this, nbits) result(value)
+    class(rndgen_kiss_t), intent(inout) :: this
+    integer, intent(in) :: nbits
+    integer(i8) :: value, word
+    integer :: remaining, count
+
+    if (nbits < 0 .or. nbits > 64) error stop 'Bit count must be in [0,64]'
+    value = 0_i8
+    remaining = nbits
+    do while (remaining > 0)
+      count = min(31, remaining)
+      word = this%next_integer()
+      value = ior(shiftl(value, count), shiftr(word, 31 - count))
+      remaining = remaining - count
+    end do
+  end function rndgen_kiss_t_random_bits
 
 !> ==== KISS random number generator procedures ====
 
